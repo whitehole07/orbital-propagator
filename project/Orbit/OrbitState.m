@@ -98,6 +98,21 @@ classdef OrbitState < handle
         function kep = getKep(obj)
             kep = [obj.a obj.e obj.i obj.OM obj.om obj.f];
         end
+    
+        function [Dv, arc, v] = transferTo(obj, final_state, Dt)
+            [Dv, v_l] = lambertTransfer(obj.r, final_state.r, ...
+                                obj.v, final_state.v, Dt, obj.body.mu);
+            if nargout > 1
+                arc = OrbitPropagation( ...
+                  "orbit_state_i", OrbitState("r", obj.r, "v", v_l(1, :)', "body", obj.body), ...
+                  "Dt", Dt ...
+                  );
+            end
+
+            if nargout > 2
+                v = v_l;
+            end
+        end
     end
     
     methods (Access = protected)

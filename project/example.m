@@ -70,7 +70,7 @@ P2 = OrbitState( ...
 Dt = 3300; % s
 
 % Lambert Solver
-[arc, v, Dv] = lambertTransfer(P1, P2, Dt);
+[Dv, arc] = P1.transferTo(P2, Dt);
 
 % Propagate P1 and P2 to get their orbits
 orbitP1 = P1.propagate();
@@ -104,12 +104,19 @@ arrival_window = TimeWindow( ...
     Time("date", [2004 3 1 0 0 0]) ...
     );
 
-[departure, arrival, Dvs] = getDvs( ...
-    departure_window, departure_planet, ...
-    arrival_window, arrival_planet ...
-    );
+step = .5; % days
+[dep, arr, Dvs] = getDvs(departure_window, departure_planet, ...
+                          arrival_window, arrival_planet, step);
 
-minimum = min(min(Dvs));
-[x,y] = find(Dvs==minimum);
-departure(x).date
-arrival(y).date
+departures = departure_window.getIteratorRaw(step);
+arrivals = arrival_window.getIteratorRaw(step);
+
+[y, x] = find(Dvs == min(min(Dvs)));
+init_dep = departures(x);
+init_arr = arrivals(y);
+
+[min_dep, min_arr, min_Dv] = minDv(init_dep, init_arr, ...
+                                   departure_planet, arrival_planet);
+
+porkchopPlot(dep, arr, Dvs);
+

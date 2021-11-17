@@ -28,6 +28,15 @@ classdef TimeWindow
             iter = arrayfun(@(mjd2000) Time("mjd2000", mjd2000), ...
                             obj.from.mjd2000:step:obj.to.mjd2000);
         end
+
+        function iter = getIteratorRaw(obj, step)
+            arguments
+                obj TimeWindow
+                step (1, 1) double = 10 % days
+            end
+            
+            iter = obj.from.mjd2000:step:obj.to.mjd2000;
+        end
     end
 end
 

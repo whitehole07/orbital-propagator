@@ -1,26 +1,15 @@
-function [arc, v, Dv] = lambertTransfer(orbit_state_i, orbit_state_f, Dt, out_arc)
+function [Dv, v] = lambertTransfer(r1, r2, v1, v2, Dt, mu)
 %LAMBERTORBITTRANSFER Summary of this function goes here
 %   Detailed explanation goes here
-    if nargin < 4
-        out_arc = true;
-    end
-
-    body = orbit_state_i.body;
-    [~, ~, ~, err, v1, v2, ~, ~] = lambertMR(orbit_state_i.r, orbit_state_f.r, ...
-                                             Dt, body.mu, 0, 0, 0);
+%   OUTPUTS: [Dv, arc, v]
+    [~, ~, ~, err, v1l, v2l, ~, ~] = lambertMR(r1, r2, Dt, mu, 0, 0, 0);
     
     if ~err
-        if out_arc
-          arc = OrbitPropagation( ...
-              "orbit_state_i", OrbitState("r", orbit_state_i.r, "v", v1', "body", body), ...
-              "Dt", Dt ...
-              );
-        else
-            arc = NaN;
+        if nargout > 1
+            v = [v1l; v2l];
         end
         
-        v = [v1 v2];
-        Dv = [norm(v1' - orbit_state_i.v) norm(orbit_state_f.v - v2')];
+        Dv = [norm(v1l' - v1) norm(v2 - v2l')];
     else
         error("Some error encountered in lambertMR.m")
     end

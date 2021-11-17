@@ -60,6 +60,10 @@ classdef CelestialBody
 
             state = OrbitState("kep", kep, "t", t, "body", sun);
         end
+
+        function [kep] = rawEphemerides(obj, mjd2000)
+            [kep, ~] = uplanet(mjd2000, obj.id);
+        end
     end
 end
 
