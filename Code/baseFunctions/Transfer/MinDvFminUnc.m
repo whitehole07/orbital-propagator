@@ -41,8 +41,9 @@ function [departure, arrival, Dv] = MinDvFminUnc(guess_dep, guess_arr, ...
         % Dv
         Dv = sum(LambertTransfer(ri, rf, vi, vf, tf - ti, body_mu));
     end
-
-    [X, Dv] = fminunc(@toBeMinimized, [guess_dep, guess_arr]);
+    
+    options = struct("Display", "off");
+    [X, Dv] = fminunc(@toBeMinimized, [guess_dep, guess_arr], options);
     departure = X(1); arrival = X(2);
 end
 
