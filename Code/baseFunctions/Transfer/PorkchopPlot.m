@@ -43,8 +43,8 @@ function PorkchopPlot(deps, arrs, Dvs)
     grid on
 
     % Title and labels
-    min_str = strcat(num2str(min(min(Dvs))), " km/s$)");
-    title(strcat("$\Delta v(t_1, t_2)$ ($\Delta v_{min} = ", min_str), "interpreter", "latex", "FontSize", 15);
+    min_str = strcat(num2str(min(min(Dvs))), " \frac{km}{s}$]");
+    title(strcat("$\Delta v(t_1, t_2)$ [$\Delta v_{min} = ", min_str), "interpreter", "latex", "FontSize", 15);
     xlabel("Departure date");
     ylabel("Arrival date");
 
@@ -62,6 +62,6 @@ function PorkchopPlot(deps, arrs, Dvs)
     caxis([min_Dv min_Dv+5])
     clabel(C, h, range);
     cb = colorbar;
-    title(cb, "$\Delta v\,[km/s]$", "interpreter", "latex");
+    title(cb, "$\Delta v\,[\frac{km}{s}]$", "interpreter", "latex");
 end
 

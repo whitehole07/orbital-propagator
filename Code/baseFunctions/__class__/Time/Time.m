@@ -47,6 +47,10 @@ classdef Time
                 error("You must specify at leat one between date, mjd, mjd200 an jd")
             end
         end
+
+        function str = toStr(obj)
+            str = datestr(obj.date);
+        end
     end
 end
 
