@@ -56,7 +56,7 @@ arr_window = TimeWindow( ...
 
 % Main Body and step
 body = CelestialBody("Sun");
-options = struct("step", .5);  % days
+options = struct("step", .5, "verbosity", 1);  % days
 
 % Interplanetary Transfer Object
 mars_expr = InterplanetaryTransfer( ...

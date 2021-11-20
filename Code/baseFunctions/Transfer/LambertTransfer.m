@@ -1,4 +1,4 @@
-function [Dv, v] = LambertTransfer(r1, r2, v1, v2, Dt, mu)
+function [Dv, v] = LambertTransfer(r1, r2, v1, v2, Dt, mu, verbosity)
 %LambertTransfer ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -18,17 +18,34 @@ function [Dv, v] = LambertTransfer(r1, r2, v1, v2, Dt, mu)
 % VERSIONS
 % 2021-10-20: First version
 %
+    if nargin < 7
+        verbosity = 1;
+    end
 
     [~, ~, ~, err, v1l, v2l, ~, ~] = lambertMR(r1, r2, Dt, mu, 0, 0, 0);
     
-    if ~err
-        if nargout > 1
-            v = [v1l; v2l];
+    
+    if nargout > 1
+        v = [v1l; v2l];
+    end
+    
+    Dv = [norm(v1l' - v1) norm(v2 - v2l')];
+
+    if err
+        switch err
+            case 1
+                error("Routine failed to converge")
+            case -1
+                if verbosity; warning("180 degrees transfer"); end
+            case 2
+                if verbosity; warning("360 degrees transfer"); end      
+            case 3
+                error("the algorithm doesn't converge because the number of revolutions is bigger than Nrevmax for that TOF")
+            case 4
+                error("Routine failed to converge, maximum number of iterations exceeded.")
+            otherwise
+                error("Generic error.")
         end
-        
-        Dv = [norm(v1l' - v1) norm(v2 - v2l')];
-    else
-        error("Some error encountered in lambertMR.m")
     end
 end
 

@@ -85,4 +85,4 @@ init_arr = arrs(x);
                             dep_planet_id, arr_planet_id, central_body_mu);
 
 % Porkchop Plot
-PorkchopPlot(deps, arrs, Dvs);
+PorkchopPlot(deps, arrs, Dvs, "minDv", min_Dv, "title", "Porkchop Plot: Earth to Mars");

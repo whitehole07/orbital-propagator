@@ -35,7 +35,7 @@ classdef InterplanetaryTransfer < handle
                 dep_window TimeWindow
                 arr_window TimeWindow
                 body CelestialBody
-                options struct = struct("step", .5)  % days
+                options struct = struct("step", .5, "verbosity", 0)  % days
             end
             
             obj.dep_planet = dep_planet; obj.arr_planet = arr_planet;
@@ -49,9 +49,31 @@ classdef InterplanetaryTransfer < handle
             obj.computeMinDv();
         end
 
-        function porkchopPlot(obj)
+        function porkchopPlot(obj, varargin)
+            % Replace minDv and set title
+            found_flags = struct("minDv", 0, "title", 0);
+            for i = 1:size(varargin, 2)
+                if strcmp(varargin{i}, "minDv")
+                    varargin{i+1} = obj.Dv;
+                    found_flags.minDv = 1;
+                    break
+                end
+                if strcmp(varargin{i}, "title")
+                    found_flags.title = 1;
+                    break
+                end
+            end
+            if ~found_flags.minDv
+                varargin{end+1} = "minDv";
+                varargin{end+1} = obj.Dv;
+            end
+            if ~found_flags.title
+                varargin{end+1} = "title";
+                varargin{end+1} = sprintf("Porkchop Plot: %s to %s", obj.dep_planet.name, obj.arr_planet.name);
+            end
+
             % Porkchop Plot
-            PorkchopPlot(obj.deps, obj.arrs, obj.Dvs);
+            PorkchopPlot(obj.deps, obj.arrs, obj.Dvs, varargin);
         end
         
     end
@@ -64,7 +86,7 @@ classdef InterplanetaryTransfer < handle
 
             % Compute the Dvs matrix
             obj.Dvs = DvsMatrix(obj.deps, obj.dep_planet.id, ...
-                obj.arrs, obj.arr_planet.id, obj.body.mu);
+                obj.arrs, obj.arr_planet.id, obj.body.mu, obj.options.verbosity);
         end
 
         function computeMinDv(obj)

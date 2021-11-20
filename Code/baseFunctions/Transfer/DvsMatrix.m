@@ -1,4 +1,4 @@
-function Dvs = DvsMatrix(deps_array, dep_planet_id,arrs_array, arr_planet_id, body_mu)
+function Dvs = DvsMatrix(deps_array, dep_planet_id,arrs_array, arr_planet_id, body_mu, verbosity)
 %DvsMatrix ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -24,6 +24,7 @@ function Dvs = DvsMatrix(deps_array, dep_planet_id,arrs_array, arr_planet_id, bo
         arrs_array double
         arr_planet_id (1, 1) double
         body_mu (1, 1) double
+        verbosity (1, 1) double = 1
     end
     
     % Init variable
@@ -42,8 +43,13 @@ function Dvs = DvsMatrix(deps_array, dep_planet_id,arrs_array, arr_planet_id, bo
             [kep_i, ~] = uplanet(arrs_array(i), arr_planet_id);
             [rf, vf] = KeplerianToCartesian(kep_i, body_mu);
             
-            % Lambert
-            Dv = LambertTransfer(ri, rf, vi, vf, tf - ti, body_mu);
+            try
+                % Lambert
+                Dv = LambertTransfer(ri, rf, vi, vf, tf - ti, body_mu, verbosity);
+            catch
+                Dvs(i, j) = NaN;
+                continue
+            end
             
             % Updating output variables
             Dvs(i, j) = sum(Dv);

@@ -30,6 +30,18 @@ classdef CelestialBody
                     obj.R = astroConstants(3);
                     obj.J2 = 0; % Undefined/Unnecessary
                     obj.om = NaN; % Undefined/Unnecessary
+                case "mercury"
+                    obj.id = 1;
+                    obj.mu = astroConstants(11);
+                    obj.R = astroConstants(21);
+                    obj.J2 = 0; % Undefined/Unnecessary
+                    obj.om = NaN; % Undefined/Unnecessary
+                case "venus"
+                    obj.id = 2;
+                    obj.mu = astroConstants(12);
+                    obj.R = astroConstants(22);
+                    obj.J2 = 0; % Undefined/Unnecessary
+                    obj.om = NaN; % Undefined/Unnecessary
                 case "earth"
                     obj.id = 3;
                     obj.mu = astroConstants(13);
@@ -40,6 +52,30 @@ classdef CelestialBody
                     obj.id = 4;
                     obj.mu = astroConstants(14);
                     obj.R = astroConstants(24);
+                    obj.J2 = 0; % Undefined/Unnecessary
+                    obj.om = NaN; % Undefined/Unnecessary
+                case "jupiter"
+                    obj.id = 5;
+                    obj.mu = astroConstants(15);
+                    obj.R = astroConstants(25);
+                    obj.J2 = 0; % Undefined/Unnecessary
+                    obj.om = NaN; % Undefined/Unnecessary
+                case "saturn"
+                    obj.id = 6;
+                    obj.mu = astroConstants(16);
+                    obj.R = astroConstants(26);
+                    obj.J2 = 0; % Undefined/Unnecessary
+                    obj.om = NaN; % Undefined/Unnecessary
+                case "uranus"
+                    obj.id = 7;
+                    obj.mu = astroConstants(17);
+                    obj.R = astroConstants(27);
+                    obj.J2 = 0; % Undefined/Unnecessary
+                    obj.om = NaN; % Undefined/Unnecessary
+                case "neptune"
+                    obj.id = 8;
+                    obj.mu = astroConstants(18);
+                    obj.R = astroConstants(28);
                     obj.J2 = 0; % Undefined/Unnecessary
                     obj.om = NaN; % Undefined/Unnecessary
                 otherwise

@@ -7,6 +7,16 @@ function options = variableArguments(options, passedVarargin, caseSensitive)
 
     %# count arguments
     nArgs = length(passedVarargin);
+    if nArgs == 1
+        try
+            passedVarargin = passedVarargin{1};
+            nArgs = length(passedVarargin);
+            if nArgs == 1; error(""); end
+        catch
+            error('propertyName/propertyValue pairs required')
+        end
+    end
+
     if round(nArgs/2)~=nArgs/2
        error('propertyName/propertyValue pairs required')
     end
