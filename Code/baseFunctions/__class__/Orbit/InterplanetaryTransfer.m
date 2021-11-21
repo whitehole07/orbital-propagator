@@ -49,31 +49,31 @@ classdef InterplanetaryTransfer < handle
             obj.computeMinDv();
         end
 
+        function plot(obj, varargin)
+            % Edit varargin
+            modifiedVarargin = editVarargin(varargin, "depPlanetName", obj.dep_planet.name, ...
+                false);
+            modifiedVarargin = editVarargin(modifiedVarargin, "arrPlanetName", obj.arr_planet.name, ...
+                false);
+
+            % Plot Transfer
+            InterplanetaryPlot( ...
+                obj.dep_window.from.mjd2000, obj.dep_window.to.mjd2000, ...
+                obj.arr_window.from.mjd2000, obj.arr_window.to.mjd2000, ...
+                obj.departure.mjd2000, obj.arrival.mjd2000, ...
+                obj.dep_planet.id, obj.arr_planet.id, obj.body.mu, ...
+                modifiedVarargin);
+        end
+
         function porkchopPlot(obj, varargin)
-            % Replace minDv and set title
-            found_flags = struct("minDv", 0, "title", 0);
-            for i = 1:size(varargin, 2)
-                if strcmp(varargin{i}, "minDv")
-                    varargin{i+1} = obj.Dv;
-                    found_flags.minDv = 1;
-                    break
-                end
-                if strcmp(varargin{i}, "title")
-                    found_flags.title = 1;
-                    break
-                end
-            end
-            if ~found_flags.minDv
-                varargin{end+1} = "minDv";
-                varargin{end+1} = obj.Dv;
-            end
-            if ~found_flags.title
-                varargin{end+1} = "title";
-                varargin{end+1} = sprintf("Porkchop Plot: %s to %s", obj.dep_planet.name, obj.arr_planet.name);
-            end
+            % Edit varargin
+            modifiedVarargin = editVarargin(varargin, "minDv", obj.Dv);
+            modifiedVarargin = editVarargin(modifiedVarargin, "title", ...
+                sprintf("Porkchop Plot: %s to %s", obj.dep_planet.name, obj.arr_planet.name), ...
+                false);
 
             % Porkchop Plot
-            PorkchopPlot(obj.deps, obj.arrs, obj.Dvs, varargin);
+            PorkchopPlot(obj.deps, obj.arrs, obj.Dvs, modifiedVarargin);
         end
         
     end

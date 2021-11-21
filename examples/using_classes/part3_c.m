@@ -70,4 +70,7 @@ fprintf("%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %.4f 
 % Porkchop Plot
 mars_expr.porkchopPlot();
 
+% Plot transfer
+mars_expr.plot("timeWindow", true);
+
 clear dep_planet arr_planet dep_window arr_window body options;

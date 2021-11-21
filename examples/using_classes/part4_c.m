@@ -33,6 +33,9 @@ fprintf("%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %.4f 
 % Porkchop Plot
 mercury.porkchopPlot("zlevel", 50, "zstep", 10, "clabel", false);
 
+% Plot Transfer
+mercury.plot();
+
 clear arr_planet dep_window arr_window options;
 
 %% Venus
@@ -62,6 +65,9 @@ fprintf("\n\n%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %
 
 % Porkchop Plot
 venus.porkchopPlot("zlevel", 50, "zstep", 10, "clabel", false);
+
+% Plot Transfer
+venus.plot();
 
 clear arr_planet dep_window arr_window options;
 
@@ -93,6 +99,9 @@ fprintf("\n\n%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %
 % Porkchop Plot
 mars.porkchopPlot("zlevel", 50, "zstep", 10, "clabel", false);
 
+% Plot Transfer
+mars.plot();
+
 clear arr_planet dep_window arr_window options;
 
 %% Jupiter
@@ -122,6 +131,9 @@ fprintf("\n\n%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %
 
 % Porkchop Plot
 jupiter.porkchopPlot("zlevel", 50, "zstep", 5, "clabel", false);
+
+% Plot Transfer
+jupiter.plot();
 
 clear arr_planet dep_window arr_window options;
 
@@ -153,6 +165,9 @@ fprintf("\n\n%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %
 % Porkchop Plot
 saturn.porkchopPlot("zlevel", 50, "zstep", 5, "clabel", false);
 
+% Plot Transfer
+saturn.plot();
+
 clear arr_planet dep_window arr_window options;
 
 %% Uranus
@@ -183,6 +198,9 @@ fprintf("\n\n%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %
 % Porkchop Plot
 uranus.porkchopPlot("zlevel", 50, "zstep", 5, "clabel", false);
 
+% Plot Transfer
+uranus.plot();
+
 clear arr_planet dep_window arr_window options;
 
 %% Neptune
@@ -212,5 +230,8 @@ fprintf("\n\n%s to %s\n------------------\nDeparture: %s\nArrival: %s\n\nCost: %
 
 % Porkchop Plot
 neptune.porkchopPlot("zlevel", 50, "zstep", 5, "clabel", false);
+
+% Plot Transfer
+neptune.plot();
 
 clear arr_planet dep_window arr_window options;

@@ -4,8 +4,9 @@ clear; close all; clc;
 %% Create celestial body
 % You can create a celestial body instance using the following syntax, 
 % the object embeds all the information related to the body.
-% So far the implemented bodies are: "Earth", "Mars", "Sun".
-% If you want to have fun implementing more of them, you're very welcome.
+% So far the implemented bodies are: "Sun", "Mercury", "Venus", "Earth",
+% "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"
+%
 % For more details: CelestialBody.m
 earth = CelestialBody("Earth");
 
@@ -40,3 +41,5 @@ state = OrbitState("a", a, "e", e, "i", i, "OM", OM, "om", om, "f", f, "body", e
 
 % or
 state = OrbitState("kep", kep, "body", earth);
+
+clear a e f i kep om OM;

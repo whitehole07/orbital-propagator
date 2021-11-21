@@ -86,3 +86,8 @@ init_arr = arrs(x);
 
 % Porkchop Plot
 PorkchopPlot(deps, arrs, Dvs, "minDv", min_Dv, "title", "Porkchop Plot: Earth to Mars");
+
+% Plot Transfer
+InterplanetaryPlot(deps_from, deps_to, arrs_from, arrs_to, min_dep, min_arr, ...
+                   dep_planet_id, arr_planet_id, central_body_mu, ...
+                   "depPlanetName", "Earth", "arrPlanetName", "Mars", "timeWindow", true);
