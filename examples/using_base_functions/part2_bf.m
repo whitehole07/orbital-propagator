@@ -1,5 +1,7 @@
 %% Cleaning up the workspace
-clc; clear; close all;
+clc; 
+clear; 
+close all;
 
 %% Orbit propagation (from states to arc of an orbit)
 % We must first define the initial and final states
