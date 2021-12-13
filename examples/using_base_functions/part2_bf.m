@@ -26,7 +26,7 @@ odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
 [tt, rr, vv] = OdeSolver(r, v, linspace(t1, t2, 10000), mu_earth, R_earth, J2_earth, odeOptions);
 
 %% Plot the orbit
-PlotOrbit(rr, R_earth);
+PlotOrbit(rr); % default is Earth
 
 %% Plot the groundtrack
 theta_g0 = 0;

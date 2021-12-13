@@ -28,27 +28,27 @@ Dt = 3300;
 
 odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
 [~, rr1, ~] = OdeSolver(r1, v1, linspace(0, T1, 1000), mu_earth, R_earth, 0, odeOptions);
-fig = PlotOrbit(rr1, R_earth);
+fig = PlotOrbit(rr1);
 
 % Transfer Orbit
 [Ta, ~, ~, ~] = OrbitProperties(r1, vl(1, :), mu_earth);
 
 odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
 [~, rra, ~] = OdeSolver(r1, vl(1, :)', linspace(0, Dt, 1000), mu_earth, R_earth, 0, odeOptions);
-PlotOrbit(rra, R_earth, fig);
+PlotOrbit(rra, "fig", fig);
 
 % Final Orbit
 [T2, ~, ~, ~] = OrbitProperties(r2, v2, mu_earth);
 
 odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
 [~, rr2, ~] = OdeSolver(r2, v2, linspace(0, T2, 1000), mu_earth, R_earth, 0, odeOptions);
-PlotOrbit(rr2, R_earth, fig);
+PlotOrbit(rr2, "fig", fig);
 
 % Initial and final state
-PlotOrbit(r1, R_earth, fig);
-PlotOrbit(r2, R_earth, fig);
+PlotOrbit(r1, "fig", fig);
+PlotOrbit(r2, "fig", fig);
 
-legend("Earth", "Initial orbit", "Transfer orbit", "Final orbit", ...
+legend("Earth", "Atmosphere", "Initial orbit", "Transfer orbit", "Final orbit", ...
        "Initial Position", "Final Position")
 
 %% Porkchop Plot (Lab 3 Exercise 3)
