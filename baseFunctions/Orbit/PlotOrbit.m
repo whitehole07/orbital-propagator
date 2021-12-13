@@ -36,12 +36,9 @@ function fig = PlotOrbit(r, varargin)
         xlabel('$x\>[km]$', 'Interpreter', 'latex')
         ylabel('$y\>[km]$', 'Interpreter', 'latex')
         zlabel('$z\>[km]$', 'Interpreter', 'latex')
-    else
-        if nargout > 0
-            fig = para.fig;
-        end
 
-        hold on
+        axis equal
+        grid on
     end
     
     hold on
@@ -50,9 +47,6 @@ function fig = PlotOrbit(r, varargin)
     else
         plot3(r(:,1), r(:,2), r(:,3), 'linewidth', 2)
     end
-
     hold off    
-    axis equal
-    grid on
 end
 

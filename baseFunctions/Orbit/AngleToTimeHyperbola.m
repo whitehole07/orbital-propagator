@@ -1,4 +1,4 @@
-function t = AngleToTimeHyperbola(a, e, mu, f)
+function t = AngleToTimeHyperbola(a, e, f, mu)
 %KeplerEquationHyperbola ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:

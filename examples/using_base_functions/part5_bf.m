@@ -81,11 +81,11 @@ angle = pi/2; % Angle to which the orbits are to be plotted
 odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
 
 % Minus propagation
-tf = AngleToTimeHyperbola(a(1), e(1), mu_earth, angle);
+tf = AngleToTimeHyperbola(a(1), e(1), angle, mu_earth);
 [ttMinus, rrMinus, vvMinus] = OdeSolver(rrMinusS, vvMinusS, [0 tf], mu_earth, Rp, 0, odeOptions);
 
 % Plus propagation
-tf = AngleToTimeHyperbola(a(2), e(2), mu_earth, angle);
+tf = AngleToTimeHyperbola(a(2), e(2), angle, mu_earth);
 [ttPlus, rrPlus, vvPlus] = OdeSolver(rrPlusS, vvPlusS, [0 tf], mu_earth, Rp, 0, odeOptions);
 
 % Plotting orbits
