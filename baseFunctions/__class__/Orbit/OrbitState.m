@@ -83,13 +83,13 @@ classdef OrbitState < handle
         function fig = plot(obj, fig)
             switch nargin
                 case 1
-                    fig = PlotOrbit(obj.r, obj.body.R);
+                    fig = PlotOrbit(obj.r, "bodyName", obj.body.name);
                 case 2
-                    fig = PlotOrbit(obj.r, obj.body.R, fig);
+                    PlotOrbit(obj.r, "fig", fig);
                 otherwise
                     error("Plot does not accept more than 1 input.");
             end
-        end 
+        end
     
         function kep = getKep(obj)
             kep = [obj.a obj.e obj.i obj.OM obj.om obj.f];

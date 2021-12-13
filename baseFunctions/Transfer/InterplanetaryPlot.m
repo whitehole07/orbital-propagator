@@ -21,7 +21,6 @@ function InterplanetaryPlot(dep_from, dep_to, arr_from, arr_to, dep, arr, ...
 %
 
     optionsStruct = struct( ...
-        "odeOptions", odeset('RelTol', 1e-13, 'AbsTol', 1e-14), ...
         "depOrbitColor", '#419ad9', ...
         "depPlanetColor", '#419ad9', ...
         "arrOrbitColor", '#d96f41', ...
@@ -58,9 +57,9 @@ function InterplanetaryPlot(dep_from, dep_to, arr_from, arr_to, dep, arr, ...
     [Dv, v] = LambertTransfer(rdi, raf, vdi, vaf, Dt, body_mu, 0);
 
     % Orbit propagation
-    [~, rd, ~] = OdeSolver(rdi, vdi, [0 Dt], body_mu, 0, 0, para.odeOptions);  % Departure Orbit
-    [~, rt, ~] = OdeSolver(rdi, v(1, :)', [0 Dt], body_mu, 0, 0, para.odeOptions);  % Transfer Orbit
-    [~, ra, ~] = OdeSolver(rai, vai, [0 Dt], body_mu, 0, 0, para.odeOptions);  % Arrival Orbit
+    [~, rd, ~] = OdeSolver(rdi, vdi, [0 Dt], body_mu, 0, 0);  % Departure Orbit
+    [~, rt, ~] = OdeSolver(rdi, v(1, :)', [0 Dt], body_mu, 0, 0);  % Transfer Orbit
+    [~, ra, ~] = OdeSolver(rai, vai, [0 Dt], body_mu, 0, 0);  % Arrival Orbit
 
     % Time Window
     if para.timeWindow
@@ -73,8 +72,8 @@ function InterplanetaryPlot(dep_from, dep_to, arr_from, arr_to, dep, arr, ...
         twd = (dep_to - dep_from) * 86400;  % Departure window duration
         twa = (arr_to - arr_from) * 86400;  % Arrival window duration
 
-        [~, rdtw, ~] = OdeSolver(rdtwf, vdtwf, [0 twd], body_mu, 0, 0, para.odeOptions);  % Departure Orbit
-        [~, ratw, ~] = OdeSolver(ratwf, vatwf, [0 twa], body_mu, 0, 0, para.odeOptions);  % Arrival Orbit
+        [~, rdtw, ~] = OdeSolver(rdtwf, vdtwf, [0 twd], body_mu, 0, 0);  % Departure Orbit
+        [~, ratw, ~] = OdeSolver(ratwf, vatwf, [0 twa], body_mu, 0, 0);  % Arrival Orbit
     end
 
     % Orbit Properties
@@ -82,8 +81,8 @@ function InterplanetaryPlot(dep_from, dep_to, arr_from, arr_to, dep, arr, ...
     [Ta, ~, ~, ~] = OrbitProperties(rai, vai, body_mu);  % Arrival Planet Orbit Period
 
     % rest of the orbit
-    [~, rdr, ~] = OdeSolver(rdf, vdf, [0 Td-Dt], body_mu, 0, 0, para.odeOptions);  % Departure Orbit
-    [~, rar, ~] = OdeSolver(raf, vaf, [0 Ta-Dt], body_mu, 0, 0, para.odeOptions);  % Arrival Orbit
+    [~, rdr, ~] = OdeSolver(rdf, vdf, [0 Td-Dt], body_mu, 0, 0);  % Departure Orbit
+    [~, rar, ~] = OdeSolver(raf, vaf, [0 Ta-Dt], body_mu, 0, 0);  % Arrival Orbit
     
     % 
     plot3(rd(:,1), rd(:,2), rd(:,3), 'linewidth', 3, 'Color', para.depOrbitColor)  % Departure Orbit

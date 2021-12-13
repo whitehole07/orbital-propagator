@@ -26,22 +26,19 @@ Dt = 3300;
 % Initial Orbit
 [T1, ~, ~, ~] = OrbitProperties(r1, v1, mu_earth);
 
-odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
-[~, rr1, ~] = OdeSolver(r1, v1, linspace(0, T1, 1000), mu_earth, R_earth, 0, odeOptions);
+[~, rr1, ~] = OdeSolver(r1, v1, linspace(0, T1, 1000), mu_earth, R_earth, 0);
 fig = PlotOrbit(rr1);
 
 % Transfer Orbit
 [Ta, ~, ~, ~] = OrbitProperties(r1, vl(1, :), mu_earth);
 
-odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
-[~, rra, ~] = OdeSolver(r1, vl(1, :)', linspace(0, Dt, 1000), mu_earth, R_earth, 0, odeOptions);
+[~, rra, ~] = OdeSolver(r1, vl(1, :)', linspace(0, Dt, 1000), mu_earth, R_earth, 0);
 PlotOrbit(rra, "fig", fig);
 
 % Final Orbit
 [T2, ~, ~, ~] = OrbitProperties(r2, v2, mu_earth);
 
-odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
-[~, rr2, ~] = OdeSolver(r2, v2, linspace(0, T2, 1000), mu_earth, R_earth, 0, odeOptions);
+[~, rr2, ~] = OdeSolver(r2, v2, linspace(0, T2, 1000), mu_earth, R_earth, 0);
 PlotOrbit(rr2, "fig", fig);
 
 % Initial and final state

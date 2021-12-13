@@ -27,7 +27,6 @@ classdef OrbitPropagation < handle
     end
     
     properties (Access = protected)
-        odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
     end
     
     methods (Access = public)
@@ -82,9 +81,9 @@ classdef OrbitPropagation < handle
         function fig = plot(obj, fig)
             switch nargin
                 case 1
-                    fig = PlotOrbit(obj.rr, obj.body.R);
+                    fig = PlotOrbit(obj.rr, "bodyName", obj.body.name);
                 case 2
-                    fig = PlotOrbit(obj.rr, obj.body.R, fig);
+                    PlotOrbit(obj.rr, "fig", fig);
                 otherwise
                     error("Plot does not accept more than 1 input.");
             end
@@ -119,7 +118,7 @@ classdef OrbitPropagation < handle
         
         function [t, r, v] = getCartesianCoordinates(obj, r0, v0, tspan)
             [t, r, v] = OdeSolver(r0, v0, tspan, obj.body.mu, obj.body.R, ...
-                obj.body.J2, obj.odeOptions);
+                obj.body.J2);
         end
         
         function [t, f] = getKeplerianCoordinates(obj, f0, tspan)

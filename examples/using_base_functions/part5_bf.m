@@ -74,19 +74,17 @@ i = 0; OM = 0; om = 0;
 angle = pi/2; % Angle to which the orbits are to be plotted
 
 % States
-[rrMinusS, vvMinusS] = KeplerianToCartesian([a(1) e(1) i OM om -angle], mu_earth); % Minus Hyperbola init point
-[rrPlusS, vvPlusS] = KeplerianToCartesian([a(2) e(2) i OM om 0], mu_earth); % Pericentre and Plus Hyperbola init point
+[rrMinusS, vvMinusS] = KeplerianToCartesian([a(1) e(1) i OM om -angle], mu_earth); % Minus Hyperbola init state
+[rrPlusS, vvPlusS] = KeplerianToCartesian([a(2) e(2) i OM om 0], mu_earth); % Pericentre and Plus Hyperbola init state
 
 % - Propagating -
-odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
-
 % Minus propagation
 tf = AngleToTimeHyperbola(a(1), e(1), angle, mu_earth);
-[ttMinus, rrMinus, vvMinus] = OdeSolver(rrMinusS, vvMinusS, [0 tf], mu_earth, Rp, 0, odeOptions);
+[~, rrMinus, ~] = OdeSolver(rrMinusS, vvMinusS, [0 tf], mu_earth, Rp, 0);
 
 % Plus propagation
 tf = AngleToTimeHyperbola(a(2), e(2), angle, mu_earth);
-[ttPlus, rrPlus, vvPlus] = OdeSolver(rrPlusS, vvPlusS, [0 tf], mu_earth, Rp, 0, odeOptions);
+[~, rrPlus, ~] = OdeSolver(rrPlusS, vvPlusS, [0 tf], mu_earth, Rp, 0);
 
 % Plotting orbits
 title = "Powered Gravity Assist";

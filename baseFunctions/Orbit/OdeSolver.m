@@ -1,4 +1,4 @@
-function [t, r, v] = OdeSolver(r0, v0, tspan, mu, R, J2, odeOptions)
+function [t, r, v] = OdeSolver(r0, v0, tspan, mu, R, J2)
 %OdeSolver ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -17,13 +17,14 @@ function [t, r, v] = OdeSolver(r0, v0, tspan, mu, R, J2, odeOptions)
 %
 % VERSIONS
 % 2021-10-20: First version
-%
-
-     [t, y] = ode113(@(t,y) OdeTwoBp(t, y, mu, R, J2), ...
-                        tspan, [r0 v0], odeOptions);
-
-     r = y(:, 1:3);
-     v = y(:, 4:end);
+%   
+     
+    odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
+    [t, y] = ode113(@(t,y) OdeTwoBp(t, y, mu, R, J2), ...
+                    tspan, [r0 v0], odeOptions);
+    
+    r = y(:, 1:3);
+    v = y(:, 4:end);
 
 end
 

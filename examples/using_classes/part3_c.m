@@ -34,7 +34,7 @@ orbitP2.plot(fig);
 P1.plot(fig);
 P2.plot(fig);
 
-legend("Earth", "Initial orbit", "Transfer orbit", "Final orbit", ...
+legend("Earth", "Atmosphere", "Initial orbit", "Transfer orbit", "Final orbit", ...
        "Initial Position", "Final Position")
 
 %% Porkchop Plot (Lab 3 Exercise 3)

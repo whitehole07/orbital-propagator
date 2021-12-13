@@ -22,8 +22,7 @@ t2 = T/2;
 
 % - Propagating -
 % We need a very high number of points to plot the groundtrack
-odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
-[tt, rr, vv] = OdeSolver(r, v, linspace(t1, t2, 10000), mu_earth, R_earth, J2_earth, odeOptions);
+[tt, rr, vv] = OdeSolver(r, v, linspace(t1, t2, 10000), mu_earth, R_earth, J2_earth);
 
 %% Plot the orbit
 PlotOrbit(rr); % default is Earth
