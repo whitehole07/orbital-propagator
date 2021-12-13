@@ -1,4 +1,4 @@
-function [turnAngle, rp, Dv, Dvp] = PoweredGravityAssist(vInfMinus, vInfPlus, mu)
+function [turnAngle, rp, Dv, Dvp, a, e] = PoweredGravityAssist(vInfMinus, vInfPlus, mu)
 %POWEREDGRAVITYASSIST Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -25,8 +25,9 @@ function [turnAngle, rp, Dv, Dvp] = PoweredGravityAssist(vInfMinus, vInfPlus, mu
     rp = fzero(@rootFunction, x0);
     
     % 2D Hyperbolas
-    [aMinus, ~] = TwoDHyperbola(mu, "vInf", norm(vInfMinus), "rp", rp);
-    [aPlus, ~] = TwoDHyperbola(mu, "vInf", norm(vInfPlus), "rp", rp);
+    [aMinus, eMinus] = TwoDHyperbola(mu, "vInf", norm(vInfMinus), "rp", rp);
+    [aPlus, ePlus] = TwoDHyperbola(mu, "vInf", norm(vInfPlus), "rp", rp);
+    a = [aMinus, aPlus]; e = [eMinus, ePlus];
 
     % Compute Dvp
     vMinusP = sqrt(mu * (2/rp - 1/aMinus));

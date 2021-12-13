@@ -1,4 +1,4 @@
-function fig = PlotOrbit(r, R, fig)
+function fig = PlotOrbit(r, varargin)
 %PlotOrbit ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -18,13 +18,29 @@ function fig = PlotOrbit(r, R, fig)
 % VERSIONS
 % 2021-10-20: First version
 % 
-    if nargin < 3
-        fig = figure("name", "Orbit", "numbertitle", "off");
+    optionsStruct = struct( ...
+        "fig", NaN, ...
+        "title", "Orbit view", ...
+        "bodyName", "Earth", ...
+        "bodyPos", [0 0 0] ...
+        );
 
-        [X, Y, Z] = sphere;
-        X = X * R; Y = Y * R; Z = Z * R; % perfect sphere
-        surf(X, Y, Z)
+    para = variableArguments(optionsStruct, varargin, true);
+
+    if ~isa(para.fig, 'matlab.ui.Figure')
+        fig = figure("name", "Orbit", "numbertitle", "off", "position", [100 100 1300 700]);
+
+        plotBody(para.bodyPos, para.bodyName);
+
+        title(para.title)
+        xlabel('$x\>[km]$', 'Interpreter', 'latex')
+        ylabel('$y\>[km]$', 'Interpreter', 'latex')
+        zlabel('$z\>[km]$', 'Interpreter', 'latex')
     else
+        if nargout > 0
+            fig = para.fig;
+        end
+
         hold on
     end
     
@@ -34,13 +50,8 @@ function fig = PlotOrbit(r, R, fig)
     else
         plot3(r(:,1), r(:,2), r(:,3), 'linewidth', 2)
     end
-    hold off    
 
-    title('Orbit view')
-    xlabel('$x\>[km]$', 'Interpreter', 'latex')
-    ylabel('$y\>[km]$', 'Interpreter', 'latex')
-    zlabel('$z\>[km]$', 'Interpreter', 'latex')
-    
+    hold off    
     axis equal
     grid on
 end

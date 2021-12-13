@@ -124,7 +124,7 @@ classdef OrbitPropagation < handle
         
         function [t, f] = getKeplerianCoordinates(obj, f0, tspan)
             if obj.e < 1
-                [t, f] = TrueAnomalyEllipse(obj.a, obj.e, ...
+                [t, f] = KeplerEquationEllipse(obj.a, obj.e, ...
                            obj.body.mu, f0, tspan);
             end
             

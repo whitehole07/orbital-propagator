@@ -60,6 +60,46 @@ v_earth = [sqrt(mu_sun/norm(r_earth)); 0; 0];
 vInfMinus = VMinus - v_earth;
 vInfPlus = VPlus - v_earth;
 
-[turnAngle, rp, Dv, Dvp] = PoweredGravityAssist(vInfMinus, vInfPlus, mu_earth);
+[turnAngle, rp, Dv, Dvp, a, e] = PoweredGravityAssist(vInfMinus, vInfPlus, mu_earth);
 
-clear AU mu_earth mu_sun r_earth v_earth vInfPlus vInfMinus VPlus VMinus;
+% Validity check
+Rp = astroConstants(23);
+h_atm = 100; % km (Karman line)
+
+assert(rp > Rp + h_atm, "Radius of pericenter is not physically feasible.")
+
+%% Plot FlyBy
+% Keplerian to Cartesian at pericentre
+i = 0; OM = 0; om = 0; 
+angle = pi/2; % Angle to which the orbits are to be plotted
+
+% States
+[rrMinusS, vvMinusS] = KeplerianToCartesian([a(1) e(1) i OM om -angle], mu_earth); % Minus Hyperbola init point
+[rrPlusS, vvPlusS] = KeplerianToCartesian([a(2) e(2) i OM om 0], mu_earth); % Pericentre and Plus Hyperbola init point
+
+% - Propagating -
+odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
+
+% Minus propagation
+tf = AngleToTimeHyperbola(a(1), e(1), mu_earth, angle);
+[ttMinus, rrMinus, vvMinus] = OdeSolver(rrMinusS, vvMinusS, [0 tf], mu_earth, Rp, 0, odeOptions);
+
+% Plus propagation
+tf = AngleToTimeHyperbola(a(2), e(2), mu_earth, angle);
+[ttPlus, rrPlus, vvPlus] = OdeSolver(rrPlusS, vvPlusS, [0 tf], mu_earth, Rp, 0, odeOptions);
+
+% Plotting orbits
+title = "Powered Gravity Assist";
+% Minus arc and init figure
+fig = PlotOrbit(rrMinus, "title", title, "bodyName", "Earth");
+% Plus arc
+PlotOrbit(rrPlus, "fig", fig);
+% Pericentre
+PlotOrbit(rrPlusS, "fig", fig);
+
+% Legend
+legend("Earth", "Atmosphere", "Incoming hyperbola", "Outcoming hyperbola", "Pericentre")
+
+view(120, 30);
+
+clear; clc;
