@@ -1,8 +1,8 @@
-function [t, r, v] = OdeSolver(r0, v0, tspan, mu, R, J2)
-%OdeSolver ODE system for the two-body problem (Keplerian motion)
+function dy = CartesianEoM(t, y, mu, ap)
+%OdeTwoBp ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
-% [t, r, v] = OdeSolver(r0, v0, tspan, mu, R, J2, odeOptions)
+% dy = OdeTwoBp(~, y, mu, R, J2)
 %
 % INPUT:
 % t   [1]    Time (can be omitted, as the system is autonomous)    [T]
@@ -17,14 +17,17 @@ function [t, r, v] = OdeSolver(r0, v0, tspan, mu, R, J2)
 %
 % VERSIONS
 % 2021-10-20: First version
-%   
-     
-    odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
-    [t, y] = ode113(@(t,y) OdeTwoBp(t, y, mu, R, J2), ...
-                    tspan, [r0 v0], odeOptions);
+%
+    % Position vector and velocity into single variables
+    rv = y(1:3); vv = y(4:6); 
     
-    r = y(:, 1:3);
-    v = y(:, 4:end);
+    % Derived parameter
+    r = norm(rv);
+    
+    % Equations of motion
+    dr = vv;
+    dv = (-mu/r^3)*rv + ap(t, y);
 
+    dy = [dr; dv];
 end
 

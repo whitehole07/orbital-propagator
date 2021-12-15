@@ -1,7 +1,5 @@
 %% Cleaning up the workspace
-clc; 
-clear; 
-close all;
+clc; clear; close all;
 
 %% Orbit propagation (from states to arc of an orbit)
 % We must first define the initial and final states
@@ -21,8 +19,12 @@ t1 = 0;
 t2 = T/2;
 
 % - Propagating -
+% Physical parameters for perturbations
+params = odeParamStruct("R", R_earth, "J2", J2_earth); % Perturbing effect due to J2
+
 % We need a very high number of points to plot the groundtrack
-[tt, rr, vv] = OdeSolver(r, v, linspace(t1, t2, 10000), mu_earth, R_earth, J2_earth);
+tspan = linspace(t1, t2, 10000);
+[tt, rr, vv] = OdeSolver("cartesian", [r v], tspan, mu_earth, params);
 
 %% Plot the orbit
 PlotOrbit(rr); % default is Earth

@@ -117,8 +117,11 @@ classdef OrbitPropagation < handle
     methods (Access = protected)
         
         function [t, r, v] = getCartesianCoordinates(obj, r0, v0, tspan)
-            [t, r, v] = OdeSolver(r0, v0, tspan, obj.body.mu, obj.body.R, ...
-                obj.body.J2);
+            % Physical parameters for perturbations
+            params = odeParamStruct("R", obj.body.R, "J2", obj.body.J2); % Perturbing effect due to J2
+
+            % ODE Solver
+            [t, r, v] = OdeSolver("cartesian", [r0, v0], tspan, obj.body.mu, params);
         end
         
         function [t, f] = getKeplerianCoordinates(obj, f0, tspan)

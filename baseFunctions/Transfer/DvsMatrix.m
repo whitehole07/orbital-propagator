@@ -1,4 +1,4 @@
-function Dvs = DvsMatrix(deps_array, dep_planet_id,arrs_array, arr_planet_id, body_mu, verbosity)
+function Dvs = DvsMatrix(deps_array, dep_planet_id, arrs_array, arr_planet_id, body_mu, verbosity)
 %DvsMatrix ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:

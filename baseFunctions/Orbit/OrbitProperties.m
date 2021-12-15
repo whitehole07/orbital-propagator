@@ -20,7 +20,7 @@ function [T, n, eps, h] = OrbitProperties(r, v, mu)
 %
     a = 1/(2/norm(r) - dot(v,v)/mu);
     
-    T = 2*pi*sqrt(a^3/mu); % Orbital period [1/s]
+    T = 2*pi*sqrt(a^3/mu); % Orbital period [s]
     n = 2*pi / T;
     eps = - (mu/2*a);
     h = cross(r, v);
