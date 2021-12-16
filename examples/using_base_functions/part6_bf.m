@@ -38,7 +38,7 @@ for i = 1:S; kep_from_cart(i, :) = CartesianToKeplerian(rr(i, :), vv(i, :), mu_e
 % Unwrap OM, om and f
 kep_from_cart(:, 4:end) = unwrap(kep_from_cart(:, 4:end));
 
-%% Moving Meand LPF
+%% Moving Mean LPF
 kepf = movmeanLPF(tspan, kep, 5*T);
 
 %% (Absolute) Error plots
