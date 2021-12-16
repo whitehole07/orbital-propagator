@@ -1,10 +1,11 @@
-function errorPlot(tv, xk, xc, name, ext_name, mu)
+function errorPlot(tv, xk, xc, xf, name, ext_name, mu)
 %ERRORPLOT Summary of this function goes here
 %   Detailed explanation goes here
     arguments
         tv double
         xk double
         xc double
+        xf double
         name string = "x"
         ext_name string = "Variable"
         mu string = "-" % unit
@@ -15,13 +16,13 @@ function errorPlot(tv, xk, xc, name, ext_name, mu)
     
     % Left plot
     nexttile
-    plot(tv, xc, tv, xk)
+    plot(tv, xc, tv, xk, tv, xf)
 
     xlim([0 tv(end)])
     xlabel('$Time\>[T]$', 'Interpreter', 'latex')
     ylabel(sprintf('$%s\\>[%s]$', name, mu), 'Interpreter', 'latex')
     title("Value Plot")
-    legend("Cartesian", "Keplerian")
+    legend("Cartesian", "Keplerian", "Filtered")
     grid on
     
     % Right plot
