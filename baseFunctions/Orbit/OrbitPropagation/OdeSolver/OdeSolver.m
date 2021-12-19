@@ -30,30 +30,39 @@ function [t, varargout] = OdeSolver(RF, y0, tspan, mu, params)
         otherwise; error("Supported reference frames are: 'Cartesian' and 'Keplerian' (RSW).");
     end
     
-    % Default perturbing acceleration function handle
-    ap = @(t, y) 0;
-    
     % Perturbing Accelerations
-    if ~isnan(params.J2) % If J2 is not zero
+    aps = {}; % cell array containing perturbing accelerations
+    if ~isnan(params.J2) % If J2 is not NaN
         % Mandatory inputs check
         if isnan(params.R); error("Missing required input: R"); end
 
         % Adding acceleration due to J2 effect
-        ap = @(t, y) aJ2(RF, y, params.J2, params.R, mu);
+        aps{end + 1} = @(t, y) aJ2(RF, y, params.J2, params.R, mu);
+    end
+    if isa(params.ThirdBody, 'string') % If ThirdBody is not NaN
+        % Mandatory inputs check
+        if isnan(params.initMjd2000); error("Missing required input: initMjd2000"); end
+
+        switch lower(params.ThirdBody)
+            case "moon"; af = @aMoon;
+            otherwise; error("Supported third bodies are: Moon");
+        end
+
+        % Adding acceleration due to third body
+        aps{end + 1} = @(t, y) af(RF, y, t, params.initMjd2000);
     end
     
     % Perturbed equations of motion
-    PerturbedEoM = @(t, y) EoM(t, y, mu, ap);
+    PerturbedEoM = @(t, y) EoM(t, y, mu, aps);
 
     % Ode Solver
     odeOptions = odeset('RelTol', 1e-13, 'AbsTol', 1e-14);
     [t, y] = params.OdeSolver(PerturbedEoM, tspan, y0, odeOptions);
 
     % To output
-    if nargout == 3
-        varargout{1} = y(:, 1:3); varargout{2} = y(:, 4:end); % rr, vv [vectors]
-    else
-        varargout{1} = y;                                     % kep [matrix]
+    switch lower(RF)
+        case "cartesian"; varargout{1} = y(:, 1:3); varargout{2} = y(:, 4:end); % rr, vv [Nx3]
+        case "keplerian"; varargout{1} = y;                                     % kep    [Nx6]
     end
 
 end

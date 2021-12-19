@@ -23,4 +23,4 @@ arr_planet = 1;      % Arrival Planet ID (Mercury)
 earliest_dep = date2mjd2000([2030 1 1 0 0 0]);    % Earliest Departure
 latest_arr = date2mjd2000([2030 1 1 0 0 0]);      % Latest Arrival
 
-%% 
+%%

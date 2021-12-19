@@ -1,4 +1,4 @@
-function dy = KeplerianEoM(t, y, mu, ap)
+function dy = KeplerianEoM(t, y, mu, aps)
 %OdeTwoBp ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -17,10 +17,13 @@ function dy = KeplerianEoM(t, y, mu, ap)
 %
 % VERSIONS
 % 2021-10-20: First version
-%
+%   
+    % Evaluate perturbing acceleration
+    ap = 0; for i = 1:length(aps); ap = ap + aps{i}(t, y); end
+
     % Unpack state and acceleration into single variables
     [a, e, i, ~, om, f] = unpack(y);
-    [ar, as, aw] = unpack(ap(t, y));
+    [ar, as, aw] = unpack(ap);
 
     % Derived parameters
     p = a * (1 - e^2);
@@ -33,7 +36,7 @@ function dy = KeplerianEoM(t, y, mu, ap)
     di = (aw*r*cos(f + om)) / h;
     dOM = (aw*r*sin(f + om)) / (h*sin(i));
     dom = (1/(h*e))*((p + r)*sin(f)*as - p*cos(f)*ar) - (aw*r*sin(f + om)*cos(i))/(h*sin(i));
-    dof = h/r^2 + (1/(h*e))*(p*cos(f)*ar - (p + r)*sin(f)*as);
+    df = h/r^2 + (1/(h*e))*(p*cos(f)*ar - (p + r)*sin(f)*as);
     
-    dy = [da; de; di; dOM; dom; dof];
+    dy = [da; de; di; dOM; dom; df];
 end

@@ -1,4 +1,4 @@
-function dy = CartesianEoM(t, y, mu, aps)
+function A_GEO_to_RSW = geoToRSW(rr, vv)
 %OdeTwoBp ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -17,20 +17,11 @@ function dy = CartesianEoM(t, y, mu, aps)
 %
 % VERSIONS
 % 2021-10-20: First version
-%
-    % Evaluate perturbing acceleration
-    ap = 0; for i = 1:length(aps); ap = ap + aps{i}(t, y); end
-    
-    % Position vector and velocity into single variables
-    rv = y(1:3); vv = y(4:6); 
-    
-    % Derived parameter
-    r = norm(rv);
+%   
+    r = rr / norm(rr);
+    w = cross(rr, vv) / norm(cross(rr, vv));
+    s = cross(w, r);
 
-    % Equations of motion
-    dr = vv;
-    dv = (-mu/r^3)*rv + ap;
-
-    dy = [dr; dv];
+    A_GEO_to_RSW = [r w s];
 end
 

@@ -15,7 +15,6 @@ kep0 = [7571 0.01 deg2rad(87.9) pi pi 0];                  % Keplerian elements
 N = 100;                            % Number of revolutions
 S = 10000;                          % Number of steps
 T = 2*pi*sqrt(kep0(1)^3/mu_earth);  % Orbital period [s]
-Dt = N*T / (S - 1);                 % Time spacing between elements
 tspan = linspace(0, N*T, S);
 
 % - Propagating -
@@ -48,3 +47,5 @@ errorPlot(tspan/T, kep(:, 3), kep_from_cart(:, 3), kepf(:, 3), "i", "Inclination
 errorPlot(tspan/T, kep(:, 4), kep_from_cart(:, 4), kepf(:, 4), "OM", "RAAN", "rad")                    % OM
 errorPlot(tspan/T, kep(:, 5), kep_from_cart(:, 5), kepf(:, 5), "om", "Argument of Periapsis", "rad")   % om
 errorPlot(tspan/T, kep(:, 6), kep_from_cart(:, 6), kepf(:, 6), "f", "True Anomaly", "rad")             % f
+
+clear; clc;
