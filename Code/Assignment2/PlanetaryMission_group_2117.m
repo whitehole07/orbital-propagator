@@ -61,7 +61,5 @@ t1 = 0; t2 = 1000 * 86400; tspan = linspace(t1, t2, 10);
 % [~, kep] = OdeSolver("keplerian", kep0, [0 t2], mu_earth, params);
 
 %% Plot the orbit
-PlotOrbit(rr); % default is Earth
-
-
+plotOrbit(rr); % default is Earth
 
