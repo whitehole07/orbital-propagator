@@ -1,4 +1,4 @@
-function [lat, lon] = GroundTrack(rr, om, theta_g0, t, t0)
+function [lat, lon] = GroundTrack(rr, tt, body_name, theta_g0)
 %GroundTrack ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -17,23 +17,39 @@ function [lat, lon] = GroundTrack(rr, om, theta_g0, t, t0)
 %
 % VERSIONS
 % 2021-10-20: First version
-%
+%   
+    % Default value for theta_g0
+    if nargin < 4
+        theta_g0 = 0;
+    end
 
+    % Get body and its rotation speed
+    body = celestialBody(body_name); om = body.om;
+
+    % Initial time
+    t0 = tt(1);
+    
+    % Unpack cartesian coordinates
     x = rr(:, 1); y = rr(:, 2); z =  rr(:, 3); r = vecnorm(rr')';
     
-    delta = asin(z ./ r); % delta, declination
+    % Compute declination
+    delta = asin(z ./ r);  % delta, declination
     
-    alpha = zeros(size(t, 1), 1);
-    for i = 1 : size(t, 1)
+    % Alpha
+    alpha = zeros(length(tt), 1);
+    for i = 1 : length(tt)
         if y(i)/r(i) > 0
             alpha(i) = acos((x(i) / r(i)) / cos(delta(i)));
         else
             alpha(i) = 2*pi - acos((x(i) / r(i)) / cos(delta(i)));
         end
     end
-    theta_g = @(t) theta_g0 + om * (t - t0);
 
+    % Theta_g due to body rotation around its axis
+    theta_g = @(t) theta_g0 + om * (t - t0);
+    
+    % Latitude and longitude in degrees
     lat = rad2deg(delta);
-    lon = rad2deg(wrapToPi(alpha - theta_g(t)));
+    lon = rad2deg(wrapToPi(alpha - theta_g(tt)));
 end
 

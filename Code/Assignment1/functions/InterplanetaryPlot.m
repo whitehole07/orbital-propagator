@@ -40,7 +40,7 @@ function InterplanetaryPlot(deps, gas, arrs, dep, ga, arr, ...
     % Time windows
     dep_from = deps(1); dep_to = deps(end);        % Departure
     ga_from = gas(1); ga_to = gas(end);            % FlyBy
-    arr_from = arrs(1); arr_to = arrs(end);        % Arrivals
+    arr_from = arrs(1); arr_to = arrs(end);        % Arrival
 
     figure("name", "Interplanetary Transfer", "numbertitle", "off", "position", [100 100 1300 700]);
 
@@ -66,17 +66,17 @@ function InterplanetaryPlot(deps, gas, arrs, dep, ga, arr, ...
     Dt1 = (ga - dep) * 86400; Dt2 = (arr - ga) * 86400; Dt = Dt1 + Dt2;
 
     % Compute Dv
-    [Dv, ~, vls] = ComputeDv(dep, ga, arr, dep_planet.id, ga_planet.id, ga_planet.mu, arr_planet.id, central_body.mu);
+    [Dv, ~, vls, Dvs] = ComputeDv(dep, ga, arr, dep_planet.id, ga_planet.id, ga_planet.mu, arr_planet.id, central_body.mu);
 
     % Velocities
     v1l = vls(:, 1:2); v2l = vls(:, 3:4);
 
     % Neglect perturbing accelerations
     % Orbit propagation
-    [~, rd, ~] = OdeSolver("cartesian", [rdi, vdi], [0 Dt], central_body.mu);         % Departure Orbit
-    [~, rt1, ~] = OdeSolver("cartesian", [rdi, v1l(:, 1)], [0 Dt1], central_body.mu);  % Transfer Orbit 1
-    [~, rt2, ~] = OdeSolver("cartesian", [rga, v2l(:, 1)], [0 Dt2], central_body.mu);  % Transfer Orbit 2
-    [~, ra, ~] = OdeSolver("cartesian", [rai, vai], [0 Dt], central_body.mu);         % Arrival Orbit
+    [~, rd, ~] = OdeSolver("cartesian", [rdi; vdi], [0 Dt], central_body.mu);         % Departure Orbit
+    [~, rt1, ~] = OdeSolver("cartesian", [rdi; v1l(:, 1)], [0 Dt1], central_body.mu);  % Transfer Orbit 1
+    [~, rt2, ~] = OdeSolver("cartesian", [rga; v2l(:, 1)], [0 Dt2], central_body.mu);  % Transfer Orbit 2
+    [~, ra, ~] = OdeSolver("cartesian", [rai; vai], [0 Dt], central_body.mu);         % Arrival Orbit
 
     % Time Window
     if para.timeWindow
@@ -92,9 +92,9 @@ function InterplanetaryPlot(deps, gas, arrs, dep, ga, arr, ...
         twga = (ga_to - ga_from) * 86400;   % FlyBy window duration
         twa = (arr_to - arr_from) * 86400;  % Arrival window duration
 
-        [~, rdtw, ~] = OdeSolver("cartesian", [rdtwf, vdtwf], [0 twd], central_body.mu);      % Departure Orbit
-        [~, rgatw, ~] = OdeSolver("cartesian", [rgatwf, vgatwf], [0 twga], central_body.mu);  % FlyBy Orbit
-        [~, ratw, ~] = OdeSolver("cartesian", [ratwf, vatwf], [0 twa], central_body.mu);      % Arrival Orbit
+        [~, rdtw, ~] = OdeSolver("cartesian", [rdtwf; vdtwf], [0 twd], central_body.mu);      % Departure Orbit
+        [~, rgatw, ~] = OdeSolver("cartesian", [rgatwf; vgatwf], [0 twga], central_body.mu);  % FlyBy Orbit
+        [~, ratw, ~] = OdeSolver("cartesian", [ratwf; vatwf], [0 twa], central_body.mu);      % Arrival Orbit
     end
 
     % Orbit Properties
@@ -103,9 +103,9 @@ function InterplanetaryPlot(deps, gas, arrs, dep, ga, arr, ...
     [Ta, ~, ~, ~] = orbitProperties(rai, vai, central_body.mu);   % Arrival Planet Orbit Period
 
     % rest of the orbit
-    [~, rdr, ~] = OdeSolver("cartesian", [rdf, vdf], [0 Td-Dt], central_body.mu);    % Departure Orbit
-    [~, rgar, ~] = OdeSolver("cartesian", [rga, vga], [0 Tga], central_body.mu);     % FlyBy Orbit (WHOLE ORBIT!)
-    [~, rar, ~] = OdeSolver("cartesian", [raf, vaf], [0 Ta-Dt], central_body.mu);    % Arrival Orbit
+    [~, rdr, ~] = OdeSolver("cartesian", [rdf; vdf], [0 Td-Dt], central_body.mu);    % Departure Orbit
+    [~, rgar, ~] = OdeSolver("cartesian", [rga; vga], [0 Tga], central_body.mu);     % FlyBy Orbit (WHOLE ORBIT!)
+    [~, rar, ~] = OdeSolver("cartesian", [raf; vaf], [0 Ta-Dt], central_body.mu);    % Arrival Orbit
     
     % Orbit arcs
     plot3(rd(:,1), rd(:,2), rd(:,3), 'linewidth', 3, 'Color', dep_planet.color)       % Departure Orbit
@@ -142,28 +142,30 @@ function InterplanetaryPlot(deps, gas, arrs, dep, ga, arr, ...
     plotBody(raf, arr_planet.name, para.arrBodyScaleFactor) % Final state arrival planet
     
     % Text
-    min_str = strcat(num2str(Dv), " \frac{km}{s}$");
+    dvs_str = sprintf("$\\Delta v_{tot} = %.2f \\frac{km}{s}$, " + ...
+        "$\\Delta v_{dep} = %.2f \\frac{km}{s}$, $\\Delta v_{arr} = %.2f \\frac{km}{s}$", Dv, Dvs(1), Dvs(2));
+
     dep_str = datestr(mjd20002date(dep));
+    ga_str = datestr(mjd20002date(ga));
     arr_str = datestr(mjd20002date(arr));
+    date_str = sprintf("Departure: %s - FlyBy: %s - Arrival: %s", dep_str, ga_str, arr_str);
+
     title(sprintf("From %s to %s", dep_planet.name, arr_planet.name), ...
-        sprintf("Departure: %s - Arrival: %s\n %s", dep_str, arr_str, ...
-        strcat("$\Delta v_{min} = ", min_str)), "interpreter", "latex", "FontSize", 15);
+        sprintf("%s\n%s", date_str, dvs_str), ...
+        "interpreter", "latex", "FontSize", 15);
 
     xlabel('$x\>[km]$', 'Interpreter', 'latex')
     ylabel('$y\>[km]$', 'Interpreter', 'latex')
     zlabel('$z\>[km]$', 'Interpreter', 'latex')
     
-    if para.timeWindow
-        legend(sprintf("%s motion during transfer", dep_planet.name), ...
-               "Transfer arc", sprintf("%s motion during transfer", arr_planet.name), ...
-               sprintf("%s orbit", dep_planet.name), sprintf("%s orbit", arr_planet.name), ...
-               "Departure window", "Arrival window", 'Location', 'southeast')
-    else
-        legend(sprintf("%s motion during transfer", dep_planet.name), ...
-               "Transfer arc", sprintf("%s motion during transfer", arr_planet.name), ...
-               sprintf("%s orbit", dep_planet.name), sprintf("%s orbit", arr_planet.name), ...
-               'Location', 'southeast')
-    end
+    legend(sprintf("%s motion during transfer", dep_planet.name), ...
+           "First transfer arc", ...
+           "Second transfer arc", ...
+           sprintf("%s motion during transfer", arr_planet.name), ...
+           sprintf("%s orbit", dep_planet.name), ...
+           sprintf("%s orbit", arr_planet.name), ...
+           sprintf("%s orbit", ga_planet.name), ...
+           'Location', 'southeast')
     
     axis equal
     grid on

@@ -47,7 +47,7 @@ function varargout = ComputeDv(dep, ga, arr, dep_id, ga_id, ga_mu, arr_id, body_
         vInfPlus = VPlus - Vp;                    % Plus Inf planetocentric velocity
 
         % Powered Gravity Assist
-        [~, ~, ~, Dvp, ~, ~, ~, ~, ~] = PoweredGravityAssist(vInfMinus, vInfPlus, ga_mu, ga_Rlim);
+        [turnAngle, ~, Dvfb, Dvga, ~, ~, ~, ~, ~] = PoweredGravityAssist(vInfMinus, vInfPlus, ga_mu, ga_Rlim);
     catch
         varargout = cell(1, nargout);
         for n = 1:nargout; varargout{n} = NaN; end
@@ -55,11 +55,13 @@ function varargout = ComputeDv(dep, ga, arr, dep_id, ga_id, ga_mu, arr_id, body_
     end
     
     % Updating output variables
-    Dv = Dv1 + Dv2 + Dvp;
+    Dv = Dv1 + Dv2 + Dvga;
 
     % Output arguments
     varargout{1} = Dv;
     if nargout > 1; varargout{2} = [vInfMinus vInfPlus]; end       % Hyperbolas velocities
-    if nargout > 2; varargout{3} = [v1l' v2l']; end                 % Lambert velocities
+    if nargout > 2; varargout{3} = [v1l' v2l']; end                % Lambert velocities
+    if nargout > 3; varargout{4} = [Dv1 Dv2 Dvfb Dvga]; end        % Detailed Dvs
+    if nargout > 4; varargout{5} = turnAngle; end                  % Turn Angle
 end
 

@@ -17,14 +17,17 @@ function PlotGroundTrack(lat, lon)
 %
 % VERSIONS
 % 2021-10-20: First version
-%
+%   
     figure("name", "Groundtrack", "numbertitle", "off", "position", [0 0 1200 600])
     
     xlim([-180 180])
     ylim([-90 90])
     
     i = imread("earth.jpg");
-    image(xlim, ylim, i);
+    image(xlim, flip(ylim), i);
+    
+    ax = gca;
+    ax.YDir = 'normal';
     
     grid on
     hold on
@@ -39,7 +42,7 @@ function PlotGroundTrack(lat, lon)
     
     xticks(-180:30:180)
     yticks(-90:30:90)
-    
+
     hold off
 end
 

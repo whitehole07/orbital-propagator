@@ -27,6 +27,7 @@ latest_arr = date2mjd2000([2070 1 1 0 0 0]);      % Latest Arrival
 central_body = celestialBody("Sun");  % Sun struct
 
 %% Selecting time windows
+% Initial choice for the time windows, justifying it based on the characteristics of the mission.
 step = 240; % time step (days)
 
 departures = date2mjd2000([2030 1 1 0 0 0]) : step : date2mjd2000([2040 1 1 0 0 0]);
@@ -34,6 +35,7 @@ ga_times = date2mjd2000([2040 1 1 0 0 0]) : step : date2mjd2000([2050 1 1 0 0 0]
 arrivals = date2mjd2000([2050 1 1 0 0 0]) : step : date2mjd2000([2070 1 1 0 0 0]);
 
 % Defining the limit radius for fly by
+% Additional constraints considered (such as minimum altitude of the closest approach during the flyby).
 ga_Rlim = ga_planet.h_atm + ga_planet.R;  % Limit radius for flyby
 
 % Compute Dvs
