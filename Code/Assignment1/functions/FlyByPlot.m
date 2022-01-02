@@ -10,7 +10,7 @@ function FlyByPlot(vInfMinus, vInfPlus, body)
     
     %% Plot FlyBy
     % Keplerian to Cartesian at pericentre
-    angle = deg2rad(120); % Angle to which the orbits are to be plotted
+    angle = pi/2; % Angle to which the orbits are to be plotted
     
     % States
     [rrMinusS, vvMinusS] = KeplerianToCartesian([a(1) e(1) i OM om -angle], body.mu); % Minus Hyperbola init state

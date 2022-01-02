@@ -17,7 +17,7 @@
 %% Cleaning up the workspace
 clear; close all; clc;
 
-%% Data
+%% 1) Nominal Orbit
 % Central planet
 cen_planet = celestialBody("Earth");  % Central Planet (Earth)
 
@@ -30,8 +30,8 @@ om = 0;                % Argument of pericentre   [rad]
 f = 0;                 % True anomaly             [rad]
 
 % GT ratio
-k = 9;
-m = 4;
+k = 9;  % Revolutions of the satellite
+m = 4;  % Rotations of the planet
 
 % To kep vector
 kep0 = [a e i OM om f];
@@ -39,55 +39,60 @@ kep0 = [a e i OM om f];
 % Initial state (cartesian coordinates)
 [r0, v0] = KeplerianToCartesian(kep0, cen_planet.mu);
 
-%% Unperturbed Two-Body Problem
-% Initial orbital period
+%% 2.a) Unperturbed Two-Body Problem
+% Unperturbed orbital period
 T = 2*pi * sqrt(a^3 / cen_planet.mu); % Orbital period [s]
 
-% - Propagating -
-% Physical parameters for perturbations
-params = odeParamStruct( ...
-    "R", cen_planet.R, ...
-    "J2", cen_planet.J2, ...
-    "ThirdBody", "Moon", ...
-    "initMjd2000", 0 ...
-    );
-
 % Time array
-tt1T = linspace(0, 18*T, 10000)';          % 1 orbit
+tt1T = linspace(0, T, 10000)';          % 1 orbit
 tt1D = linspace(0, 86400, 10000)';      % 1 day
 tt10D = linspace(0, 10*86400, 50000)';  % 10 days
 
 % Cartesian propagation (Unperturbed)
-[~, rr1T, ~] = OdeSolver("cartesian", [r0 v0], tt1T, cen_planet.mu);    % 1 orbit
-[~, rr1D, ~] = OdeSolver("cartesian", [r0 v0], tt1D, cen_planet.mu);    % 1 day
-[~, rr10D, ~] = OdeSolver("cartesian", [r0 v0], tt10D, cen_planet.mu);  % 10 days
+[~, rr1T, ~] = OdeSolver("cartesian", [r0; v0], tt1T, cen_planet.mu);    % 1 orbit
+[~, rr1D, ~] = OdeSolver("cartesian", [r0; v0], tt1D, cen_planet.mu);    % 1 day
+[~, rr10D, ~] = OdeSolver("cartesian", [r0; v0], tt10D, cen_planet.mu);  % 10 days
 
-% Unperturbed orbit plot
-% plotOrbit(rr1T);
-
-% Unperturbed groundtrack
+% Unperturbed groundtracks
 [lat1T, lon1T] = GroundTrack(rr1T, tt1T, cen_planet.name);      % 1 orbit
-[lat1D, lon1D] = GroundTrack(rr1D, tt1D, cen_planet.name);      % 1day
+[lat1D, lon1D] = GroundTrack(rr1D, tt1D, cen_planet.name);      % 1 day
 [lat10D, lon10D] = GroundTrack(rr10D, tt10D, cen_planet.name);  % 10 days  
 
 % Groundtrack plot
-PlotGroundTrack(lat1T, lon1T, 1);
-% PlotGroundTrack(lat1D, lon1D);
-% PlotGroundTrack(lat10D, lon10D);
+% PlotGroundTrack(lat1T, lon1T);       % 1 orbit
+% PlotGroundTrack(lat1D, lon1D);       % 1 day
+% PlotGroundTrack(lat10D, lon10D);     % 10 days
 
-% Modified semi major axis
-am = RepeatingGroundTrack(k, m, cen_planet.om, cen_planet.mu, a, e, i, cen_planet.J2, cen_planet.R);
+% Modified semi major axis for repeating groundtrack (unperturbed)
+am = RepeatingGroundTrack(k, m, cen_planet.om, cen_planet.mu, a, e, i);
 
-% Initial orbital period
-Tm = 2*pi * sqrt(am^3 / cen_planet.mu); % Orbital period [s]
+% Modified orbital period
+Tm = 2*pi * sqrt(am^3 / cen_planet.mu);   % Orbital period [s]
 
-tt1Tm = linspace(0, 18*Tm, 10000)';          % 1 orbit
+% New time array
+ttkTm = linspace(0, k*Tm, 30000)';    % k orbits
+
+% Modified keplerian elements
 kepm = kep0; kepm(1) = am;
-
+ 
+% Keplerian to Cartesian
 [rm, vm] = KeplerianToCartesian(kepm, cen_planet.mu);
 
-[~, rr1Tm, ~] = OdeSolver("cartesian", [rm vm], tt1Tm, cen_planet.mu);    % 1 orbit
+% Modified orbit propagation
+[~, rrkTm, ~] = OdeSolver("cartesian", [rm; vm], ttkTm, cen_planet.mu);    % k orbits
 
-[lat1Tm, lon1Tm] = GroundTrack(rr1Tm, tt1Tm, cen_planet.name);      % 1 orbit
 
-PlotGroundTrack(lat1Tm, lon1Tm, 1);
+% Modified orbit groundtracks
+[latkTm, lonkTm] = GroundTrack(rrkTm, ttkTm, cen_planet.name);      % k orbits
+
+% Plot modified groundtracks
+% PlotGroundTrack(latkTm, lonkTm);
+
+% % - Propagating -
+% % Physical parameters for perturbations
+% params = odeParamStruct( ...
+%     "R", cen_planet.R, ...
+%     "J2", cen_planet.J2, ...
+%     "ThirdBody", "Moon", ...
+%     "initMjd2000", 0 ...
+%     );

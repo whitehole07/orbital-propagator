@@ -17,10 +17,10 @@ function [v_rotated] = rotateRodrigues(v, u, d)
 %
 % VERSIONS
 % 2021-10-20: First version
-% 
-    if norm(u) ~= 1
-        error("u must be a unit norm vector.");
-    end
+%  
+%     if norm(u) ~= 1
+%         warning("u must be a unit norm vector.");
+%     end
 
     v_rotated = v*cos(d) + cross(u, v)*sin(d) + u*dot(u, v)*(1 - cos(d));
 end
