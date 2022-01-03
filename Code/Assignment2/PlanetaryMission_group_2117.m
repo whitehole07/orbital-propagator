@@ -121,7 +121,7 @@ params = odeParamStruct( ...
 [~, rrTpc, ~] = OdeSolver("cartesian", [r0; v0], tt1T, cen_planet.mu, params);    % 1 orbit
 
 % Keplerian elements (Gauss' equations)
-[~, rrTpk, ~] = OdeSolver("cartesian", [r0; v0], tt1T, cen_planet.mu, params);    % 1 orbit
+[~, kep] = OdeSolver("keplerian", kep0, tt1T, cen_planet.mu, params);    % 1 orbit
 
 %% 5) Plot the history of the Keplerian elements
 
