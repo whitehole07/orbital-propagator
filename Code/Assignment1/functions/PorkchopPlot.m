@@ -1,19 +1,21 @@
 function PorkchopPlot(deps, arrs, Dvs, varargin)
-%PorkchopPlot ODE system for the two-body problem (Keplerian motion)
+%PorkchopPlot of a set of interplanetary transfers for the two-body problem (patched
+%conics approximation) and detection of minimum Delta V transfer inside the
+%plot
 %
 % PROTOTYPE:
-% [Dv, v] = lambertTransfer(r1, r2, v1, v2, Dt, mu)
+% PorkchopPlot(deps, arrs, Dvs, varargin)
 %
 % INPUT:
-% t   [1]    Time (can be omitted, as the system is autonomous)    [T]
-% y   [6x1]  Cartesian state of the body (rx, ry, rz, vx, vy, vz)  [L, L/T]
-% mu  [1]    Gravitational parameter of the primary                [L^3/T^2]
+% deps      [nx1]  Array of departure times                              [T]
+% arrs      [mx1]  Array of arrival times                                [T]
+% Dvs       [nxm]  Matrix of DeltaV for interplanetary transfers         [L/T]
+% varargin  [nx1]  Array of variables for variableArguments.m            [various]
 %
-% OUTPUT:
-% dy  [6x1] Derivative of the state  [L/T^2, L/T^3]
+% 
 %
 % CONTRIBUTORS:
-% Daniele Agamennone
+% Daniele Agamennone, Francesca Gargioli
 %
 % VERSIONS
 % 2021-10-20: First version

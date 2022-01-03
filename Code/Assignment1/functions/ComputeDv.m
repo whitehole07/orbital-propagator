@@ -1,7 +1,35 @@
 function varargout = ComputeDv(dep, ga, arr, dep_id, ga_id, ga_mu, arr_id, body_mu, ga_Rlim)
-%COMPUTEDV Summary of this function goes here
-%   Detailed explanation goes here
-    
+%ComputeDv: computation of the total delta velocity needed to perform an
+%interplanetary transfer, including a fly-by
+% 
+% PROTOTYPE: 
+% varargout = ComputeDv(dep, ga, arr, dep_id, ga_id, ga_mu, arr_id, body_mu, ga_Rlim)
+% 
+% INPUT:
+% dep      [1x1] Time of departure                                       [T]
+% ga       [1x1] Time of gravity assist                                  [T]
+% arr      [1x1] Time of arrival                                         [T]
+% dep_id   [1x1] Identity code of the departure planet                   [-]
+% ga_id    [1x1] Identity code of the gravity assist planet              [-]
+% ga_mu    [1x1] Planetary constant of the gravity assist planet         [km^3/s^2]
+% arr_id   [1x1] Identity code of the arrival planet                     [-]
+% body_mu  [1x1] Planetary constant of the central body (Sun)            [km^3/s^2]
+% ga_Rlim  [1x1] Minimum altitude for safe flyby                         [km]
+%
+% OUTPUT:
+%
+%     varargout{1} = Dv;                                        Total Dv for interplanetary transfer [km/s]?     
+%     if nargout > 1; varargout{2} = [vInfMinus vInfPlus]       Hyperbolas velocities                [km/s]?
+%     if nargout > 2; varargout{3} = [v1l' v2l']                Lambert velocities                   [km/s]?
+%     if nargout > 3; varargout{4} = [Dv1 Dv2 Dvfb Dvga]        Detailed Dvs                         [km/s]?
+%     if nargout > 4; varargout{5} = turnAngle                  Turn Angle                           [rad]?
+%  
+% CONTRIBUTORS:
+% Daniele Agamennone, Davide Gianmoena
+%
+% VERSIONS
+% 2021-10-20: First version
+%
     % Don't consider Rlim in this case
     if nargin < 9; ga_Rlim = 0; end
 

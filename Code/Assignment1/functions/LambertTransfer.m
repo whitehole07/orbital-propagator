@@ -1,19 +1,24 @@
 function [Dv, v] = LambertTransfer(r1, r2, v1, v2, Dt, mu, verbosity)
-%LambertTransfer ODE system for the two-body problem (Keplerian motion)
+%LambertTransfer:  caractherization of Lambert arc of the two-body problem
+%(patched conics approximation)
 %
 % PROTOTYPE:
 % [Dv, v] = lambertTransfer(r1, r2, v1, v2, Dt, mu)
 %
 % INPUT:
-% t   [1]    Time (can be omitted, as the system is autonomous)    [T]
-% y   [6x1]  Cartesian state of the body (rx, ry, rz, vx, vy, vz)  [L, L/T]
-% mu  [1]    Gravitational parameter of the primary                [L^3/T^2]
+% r1        [3x1]  Cartesian position of initial po                  [L]
+% r2        [3x1]  Cartesian position of final point                 [L]
+% v1        [3x1]  Body velocity in initial point                    [L/T]
+% v2        [3x1]  Body velocity in final point                      [L/T]
+% Dt        [1]    Time of transfer                                  [T]
+% mu        [1]    Gravitational parameter of the primary            [L^3/T^2]
+% verbosity [1]    Input parameter to output different errors        [-]
 %
 % OUTPUT:
 % dy  [6x1] Derivative of the state  [L/T^2, L/T^3]
 %
 % CONTRIBUTORS:
-% Daniele Agamennone
+% Daniele Agamennone, Francesca Gargioli
 %
 % VERSIONS
 % 2021-10-20: First version

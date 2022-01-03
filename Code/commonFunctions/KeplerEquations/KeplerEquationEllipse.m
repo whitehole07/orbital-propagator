@@ -1,19 +1,22 @@
 function [t, f] = KeplerEquationEllipse(a, e, mu, f0, tspan)
 %TrueAnomalyEllipse ODE system for the two-body problem (Keplerian motion)
 %
-% PROTOTYPE:
-% [t, f] = TrueAnomalyEllipse(a, e, mu, f0, tspan)
+% PROTOTYPE: 
+% [t, f] = KeplerEquationEllipse(a, e, mu, f0, tspan)
 %
 % INPUT:
-% t   [1]    Time (can be omitted, as the system is autonomous)    [T]
-% y   [6x1]  Cartesian state of the body (rx, ry, rz, vx, vy, vz)  [L, L/T]
-% mu  [1]    Gravitational parameter of the primary                [L^3/T^2]
+% a      [1]    Semimajor axis of the hyperobla                                         [L]
+% e      [1]    Eccentricity of the hyperbola                                           [-]
+% mu     [1]    Gravitational parameter of the primary                                  [L^3/T^2]
+% f0     [1]    True anomaly of body in hyperbolic path                                 [rad]
+% tspan  [nx1]  Time array to evaluate a set of n true anomalies along hyperbolic path  [T]
 %
 % OUTPUT:
-% dy  [6x1] Derivative of the state  [L/T^2, L/T^3]
+% t  [nx1] time of flight of body in hyperbolic path   [T]
+% f  [nx1] true anomalies computed in hyperbolic path  [rad]
 %
 % CONTRIBUTORS:
-% Daniele Agamennone
+% Daniele Agamennone, Francesca Gargioli
 %
 % VERSIONS
 % 2021-10-20: First version

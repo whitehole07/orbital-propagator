@@ -1,19 +1,24 @@
 function [turnAngle, rp, Dv, Dvp, a, e, i, OM, om] = PoweredGravityAssist(vInfMinus, vInfPlus, mu, Rlim)
-%DvsMatrix ODE system for the two-body problem (Keplerian motion)
+%PoweredGravityAssist: Summary of this function goes here
 %
 % PROTOTYPE:
-% [rr, vv] = KeplerianToCartesian(a, e, i, OM, om, f, mu)
+% [turnAngle, rp, Dv, Dvp, a, e] = PoweredGravityAssist(vInfMinus, vInfPlus, mu)
 %
 % INPUT:
-% t   [1]    Time (can be omitted, as the system is autonomous)    [T]
-% y   [6x1]  Cartesian state of the body (rx, ry, rz, vx, vy, vz)  [L, L/T]
-% mu  [1]    Gravitational parameter of the primary                [L^3/T^2]
+% vInfMinus [3x1]  Velocity in heliocentric frame at hyperbola entry     [L/T]
+% vInfPlus  [3x1]  Velocity in heliocentric frame at hyperbola exit      [L/T]
+% mu        [1x1]    Gravitational parameter of the primary                [L^3/T^2]
 %
 % OUTPUT:
-% dy  [6x1] Derivative of the state  [L/T^2, L/T^3]
+% turnAngle  [mxn]  Delta velocity matrix of departure and arrival dimensions          [L/T]
+% rp         [3x1]  Radius of pericenter                                               [L]
+% Dv         [3x1]  Delta velocity developed by fly-by                                 [-]
+% Dvp        [3x1]  Delta velocity impressed at pericenter of hyperbolic fly-by path   [L/T]
+% a          [1x1]  Semimajor axis of hyperbolic fly-by path                           [L]
+% e          [1x1]  Eccentricity of hyperbolic fly-by path                             [-]
 %
 % CONTRIBUTORS:
-% Daniele Agamennone
+% Daniele Agamennone, Farncesca Gargioli
 %
 % VERSIONS
 % 2021-10-20: First version

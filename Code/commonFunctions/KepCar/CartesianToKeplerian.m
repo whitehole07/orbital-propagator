@@ -1,19 +1,20 @@
 function kep = CartesianToKeplerian(rr, vv, mu)
-%CartesianToKeplerian ODE system for the two-body problem (Keplerian motion)
+%CartesianToKeplerian: conversion from cartesian to keplerian orbit
+%parameters. 
 %
 % PROTOTYPE:
 % kep = CartesianToKeplerian(rr, vv, mu)
 %
 % INPUT:
-% t   [1]    Time (can be omitted, as the system is autonomous)    [T]
-% y   [6x1]  Cartesian state of the body (rx, ry, rz, vx, vy, vz)  [L, L/T]
-% mu  [1]    Gravitational parameter of the primary                [L^3/T^2]
+% rr   [3x1]   Position of the body in inertial frame (rx, ry, rz)   [L]
+% vv   [3x1]   Velocity of the body in inertial frame (vx, vy, vz)   [L/T]
+% mu   [1]     Gravitational parameter of the primary                [L^3/T^2]
 %
 % OUTPUT:
-% dy  [6x1] Derivative of the state  [L/T^2, L/T^3]
+% kep  [6x1] keplerian parameters of orbit (a, e, i, OM, om, th)  [L, -, rad, rad, rad, rad]
 %
 % CONTRIBUTORS:
-% Daniele Agamennone
+% Daniele Agamennone, Francesca Gargioli
 %
 % VERSIONS
 % 2021-10-20: First version

@@ -1,24 +1,30 @@
 function Dvs = DvsMatrix(deps, dep_id, arrs, arr_id, ...
             gas, ga_id, ga_mu, ga_Rlim, body_mu)
-%DvsMatrix ODE system for the two-body problem (Keplerian motion)
+%DvsMatrix: computation of Delta velocity matrix of dimensions mxn, with given a
+% departure array of size mx1 and an arrival array of nx1 size. 
+%Delta velocity matrix represents all mxn possibilities of interplanetary
+% transfers given two planets, in the patched conics method approximation
 %
 % PROTOTYPE:
-% [rr, vv] = KeplerianToCartesian(a, e, i, OM, om, f, mu)
+% Dvs = DvsMatrix(deps_array, dep_planet_id, arrs_array, arr_planet_id, body_mu, verbosity)
 %
 % INPUT:
-% t   [1]    Time (can be omitted, as the system is autonomous)    [T]
-% y   [6x1]  Cartesian state of the body (rx, ry, rz, vx, vy, vz)  [L, L/T]
-% mu  [1]    Gravitational parameter of the primary                [L^3/T^2]
+% deps_array     [mx1]  Departure time array                                    [T]
+% dep_planet_id  [1]    Departure planet identity number                        [-]
+% arrs_array     [nx1]  Arrival time array                                      [T]
+% arr_planet_id  [1]    Arrival planet identity number                          [-]
+% body_mu        [1]    Gravitational parameter of the primary                  [L^3/T^2]
+% verbosity      [1]    Input parameter to output different errors              [-]
 %
 % OUTPUT:
-% dy  [6x1] Derivative of the state  [L/T^2, L/T^3]
+% Dvs  [mxn] Delta velocity matrix of departure and arrival dimensions  [L/T]
 %
 % CONTRIBUTORS:
-% Daniele Agamennone
+% Daniele Agamennone, Farncesca Gargioli
 %
 % VERSIONS
 % 2021-10-20: First version
-%  
+%
     % Init variable
     Dvs = zeros(length(deps), length(gas), length(arrs));
 
