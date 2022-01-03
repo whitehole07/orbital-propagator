@@ -18,10 +18,13 @@ function A_GEO_to_RSW = geoToRSW(rr, vv)
 % VERSIONS
 % 2021-10-20: First version
 %   
+    
+    % RSW coordinates with respect to a cartesian reference frame
     r = rr / norm(rr);
     w = cross(rr, vv) / norm(cross(rr, vv));
     s = cross(w, r);
-
-    A_GEO_to_RSW = [r w s];
+    
+    % Rotation matrix (GEO -> RSW)
+    A_GEO_to_RSW = [r s w]';
 end
 

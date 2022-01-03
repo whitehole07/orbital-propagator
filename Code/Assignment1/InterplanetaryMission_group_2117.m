@@ -57,7 +57,7 @@ min_Dv_m = zeros(1, n);
 
 % Find possible minimums
 for i = 1:n
-    [deltav, I] = FindOptimumDv(Dvs_m);
+    [deltav, I] = findOptimumDv(Dvs_m);
     Dvs_m(I(1), I(2), I(3)) = NaN;
 
     % Initial guess values to find refined solution

@@ -41,11 +41,11 @@ kep_from_cart(:, 4:end) = unwrap(kep_from_cart(:, 4:end));
 kepf = movmeanLPF(tspan, kep, 5*T);
 
 %% (Absolute) Error plots
-errorPlot(tspan/T, kep(:, 1), kep_from_cart(:, 1), kepf(:, 1), "a", "Semi-major axis", "km")           % a
-errorPlot(tspan/T, kep(:, 2), kep_from_cart(:, 2), kepf(:, 2), "e", "Eccentricity", "-")               % e
-errorPlot(tspan/T, kep(:, 3), kep_from_cart(:, 3), kepf(:, 3), "i", "Inclination", "rad")              % i
-errorPlot(tspan/T, kep(:, 4), kep_from_cart(:, 4), kepf(:, 4), "OM", "RAAN", "rad")                    % OM
-errorPlot(tspan/T, kep(:, 5), kep_from_cart(:, 5), kepf(:, 5), "om", "Argument of Periapsis", "rad")   % om
-errorPlot(tspan/T, kep(:, 6), kep_from_cart(:, 6), kepf(:, 6), "f", "True Anomaly", "rad")             % f
+ErrorPlot(tspan/T, kep(:, 1), kep_from_cart(:, 1), kepf(:, 1), "a", "Semi-major axis", "km")           % a
+ErrorPlot(tspan/T, kep(:, 2), kep_from_cart(:, 2), kepf(:, 2), "e", "Eccentricity", "-")               % e
+ErrorPlot(tspan/T, kep(:, 3), kep_from_cart(:, 3), kepf(:, 3), "i", "Inclination", "rad")              % i
+ErrorPlot(tspan/T, kep(:, 4), kep_from_cart(:, 4), kepf(:, 4), "OM", "RAAN", "rad")                    % OM
+ErrorPlot(tspan/T, kep(:, 5), kep_from_cart(:, 5), kepf(:, 5), "om", "Argument of Periapsis", "rad")   % om
+ErrorPlot(tspan/T, kep(:, 6), kep_from_cart(:, 6), kepf(:, 6), "f", "True Anomaly", "rad")             % f
 
 clear; clc;

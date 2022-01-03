@@ -1,4 +1,4 @@
-function errorPlot(tv, xk, xc, xf, name, ext_name, mu)
+function ErrorPlot(tv, xk, xc, xf, name, ext_name, mu)
 %ERRORPLOT Summary of this function goes here
 %   Detailed explanation goes here
     arguments

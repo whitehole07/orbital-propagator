@@ -96,7 +96,7 @@ params = odeParamStruct( ...
     "R", cen_planet.R, ...
     "J2", cen_planet.J2, ...
     "ThirdBody", "Moon", ...
-    "initMjd2000", 0 ...
+    "initMjd2000", 0 ...      % Initial MJD2000 for Moon ephemerides
 );
 
 % Nominal orbit propagation and groundtrack (Perturbed)
@@ -117,13 +117,33 @@ params = odeParamStruct( ...
 % They've been introduced in the previous section through 'params' variable
 
 %% 4) Propagate the perturbed orbit
+% Time array
+n = 2000;                           % Number of revolutions
+ttnT = linspace(0, n*T, n*10)';     % n orbits
+
 % Cartesian coordinates
-[~, rrTpc, ~] = OdeSolver("cartesian", [r0; v0], tt1T, cen_planet.mu, params);    % 1 orbit
+[~, rrTpc, vvTpc] = OdeSolver("cartesian", [r0; v0], ttnT, cen_planet.mu, params);    % 1 orbit
 
 % Keplerian elements (Gauss' equations)
-[~, kep] = OdeSolver("keplerian", kep0, tt1T, cen_planet.mu, params);    % 1 orbit
+[~, kep] = OdeSolver("keplerian", kep0, ttnT, cen_planet.mu, params);    % 1 orbit
 
 %% 5) Plot the history of the Keplerian elements
+% Converting cartesian to keplerian
+kepc = zeros(length(ttnT), 6);
+for i = 1:length(ttnT); kepc(i, :) = CartesianToKeplerian(rrTpc(i, :), vvTpc(i, :), cen_planet.mu); end
 
+% Unwrap OM, om and f
+kepc(:, 4:end) = unwrap(kepc(:, 4:end));
+
+% Moving Mean LPF
+kepf = movmeanLPF(ttnT, kepc, 5*T);
+
+% (Absolute) Error plots
+ErrorPlot(ttnT/T, kep(:, 1), kepc(:, 1), kepf(:, 1), "a", "Semi-major axis", "km")           % a
+ErrorPlot(ttnT/T, kep(:, 2), kepc(:, 2), kepf(:, 2), "e", "Eccentricity", "-")               % e
+ErrorPlot(ttnT/T, kep(:, 3), kepc(:, 3), kepf(:, 3), "i", "Inclination", "rad")              % i
+ErrorPlot(ttnT/T, kep(:, 4), kepc(:, 4), kepf(:, 4), "OM", "RAAN", "rad")                    % OM
+ErrorPlot(ttnT/T, kep(:, 5), kepc(:, 5), kepf(:, 5), "om", "Argument of Periapsis", "rad")   % om
+ErrorPlot(ttnT/T, kep(:, 6), kepc(:, 6), kepf(:, 6), "f", "True Anomaly", "rad")             % f
 
 

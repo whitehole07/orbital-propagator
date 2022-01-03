@@ -1,4 +1,4 @@
-function [M,I] = FindOptimumDv(Dvs)
+function [M,I] = findOptimumDv(Dvs)
 
 
 % FINDOPTIMUMDV:

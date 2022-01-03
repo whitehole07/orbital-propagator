@@ -18,7 +18,7 @@ function a = aMoon(RF, y, t, init_mjd2000)
 % VERSIONS
 % 2021-10-20: First version
 %   
-    % Get mus
+    % Get mu's
     muMoon = astroConstants(20);
     muEarth = astroConstants(13);
 
@@ -42,7 +42,7 @@ function a = aMoon(RF, y, t, init_mjd2000)
             % aMoon expressed with respect to a cartesian reference frame
             a = muMoon * ((rrScMoon/(rScMoon^3)) - (rrEarthMoon/(rEarthMoon^3)));
         case "keplerian"
-            % Keplerian to cartesian (is it really necessary?)
+            % Keplerian to cartesian
             [rr, vv] = KeplerianToCartesian(y, muEarth);
 
             % Earth to Moon vector (geocentric equatorial)
