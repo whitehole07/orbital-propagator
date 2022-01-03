@@ -47,6 +47,7 @@ T = 2*pi * sqrt(a^3 / cen_planet.mu); % Orbital period [s]
 tt1T = linspace(0, T, 10000)';          % 1 orbit
 tt1D = linspace(0, 86400, 10000)';      % 1 day
 tt10D = linspace(0, 10*86400, 50000)';  % 10 days
+ttkT = linspace(0, k*T, 30000)';        % k orbits
 
 % Cartesian propagation (Unperturbed)
 [~, rr1T, ~] = OdeSolver("cartesian", [r0; v0], tt1T, cen_planet.mu);    % 1 orbit
@@ -63,6 +64,7 @@ tt10D = linspace(0, 10*86400, 50000)';  % 10 days
 % PlotGroundTrack(lat1D, lon1D);       % 1 day
 % PlotGroundTrack(lat10D, lon10D);     % 10 days
 
+%% 2.b) Modified semimajor axis for repeating groundtrack
 % Modified semi major axis for repeating groundtrack (unperturbed)
 am = RepeatingGroundTrack(k, m, cen_planet.om, cen_planet.mu, a, e, i);
 
@@ -78,7 +80,7 @@ kepm = kep0; kepm(1) = am;
 % Keplerian to Cartesian
 [rm, vm] = KeplerianToCartesian(kepm, cen_planet.mu);
 
-% Modified orbit propagation
+% Modified orbit propagation (Unperturbed)
 [~, rrkTm, ~] = OdeSolver("cartesian", [rm; vm], ttkTm, cen_planet.mu);    % k orbits
 
 
@@ -88,11 +90,40 @@ kepm = kep0; kepm(1) = am;
 % Plot modified groundtracks
 % PlotGroundTrack(latkTm, lonkTm);
 
-% % - Propagating -
-% % Physical parameters for perturbations
-% params = odeParamStruct( ...
-%     "R", cen_planet.R, ...
-%     "J2", cen_planet.J2, ...
-%     "ThirdBody", "Moon", ...
-%     "initMjd2000", 0 ...
-%     );
+%% 2.c) Plot adding assigned perturbations
+% Physical parameters for perturbations
+params = odeParamStruct( ...
+    "R", cen_planet.R, ...
+    "J2", cen_planet.J2, ...
+    "ThirdBody", "Moon", ...
+    "initMjd2000", 0 ...
+);
+
+% Nominal orbit propagation and groundtrack (Perturbed)
+[~, rrkTp, ~] = OdeSolver("cartesian", [r0; v0], ttkT, cen_planet.mu, params);    % k orbits
+[latkTp, lonkTp] = GroundTrack(rrkTp, ttkT, cen_planet.name);
+% PlotGroundTrack(latkTp, lonkTp);
+
+% Modified orbit propagation and groundtrack (Perturbed)
+[~, rrkTmp, ~] = OdeSolver("cartesian", [rm; vm], ttkTm, cen_planet.mu, params);  % k orbits
+[latkTmp, lonkTmp] = GroundTrack(rrkTmp, ttkTm, cen_planet.name);
+% PlotGroundTrack(latkTmp, lonkTmp);
+
+% The groundtrack clearly doesn't repeat itself anymore, but why is this
+% happening?
+
+%% 3) Introduce the assigned perturbations
+% Assigned perturbations are: J2 and Moon
+% They've been introduced in the previous section through 'params' variable
+
+%% 4) Propagate the perturbed orbit
+% Cartesian coordinates
+[~, rrTpc, ~] = OdeSolver("cartesian", [r0; v0], tt1T, cen_planet.mu, params);    % 1 orbit
+
+% Keplerian elements (Gauss' equations)
+[~, rrTpk, ~] = OdeSolver("cartesian", [r0; v0], tt1T, cen_planet.mu, params);    % 1 orbit
+
+%% 5) Plot the history of the Keplerian elements
+
+
+
