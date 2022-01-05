@@ -62,7 +62,7 @@ function kep = CartesianToKeplerian(rr, vv, mu)
     end
 
     % 5 - Argument of periapsis
-    if i ~= 0 || i ~= pi/2
+    if i ~= 0 || i ~= pi/2 % e = 0 very unlikely due to numerical errors
         cos_om = dot(N,ee)/e;
         e_z = dot(K,ee);
     

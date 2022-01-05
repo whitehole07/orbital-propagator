@@ -1,4 +1,4 @@
-function filtered = movmeanLPF(t, data, time_window)
+function filtered = MovmeanLPF(t, data, time_window)
 %unpack Convenient way to unpack an array to single variables
 %
 % PROTOTYPE:
