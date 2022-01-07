@@ -1,4 +1,4 @@
-function a = RepeatingGroundTrack(k, m, om, mu, a, e, i, J2, R)
+function am = RepeatingGroundTrack(k, m, om, mu, a, e, i, J2, R)
 %RepeatingGroundTrack ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -35,6 +35,6 @@ end
     M0_dot = ((1.5 * sqrt(mu) * J2 * (R^2))/(((1 - (e^2))^1.5) * (a^3.5))) * (1 - 1.5*(sin(i)^2));
     
     % Semi-major axis needed for repeating groundtrack
-    a = (mu/((om - OM_dot)*(k/m) - om_dot - M0_dot)^2)^(1/3);
+    am = (mu/((om - OM_dot)*(k/m) - om_dot - M0_dot)^2)^(1/3);
 end
 

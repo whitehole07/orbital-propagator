@@ -68,5 +68,13 @@ function [t, varargout] = OdeSolver(RF, y0, tspan, mu, params)
         case "keplerian"; varargout{1} = y;                                     % kep    [Nx6]
     end
 
+%     if nargout >= 4
+%         a = [];
+%         for i = 1:length(t)
+%             a = [a; aJ2(RF, y(i, :)', params.J2, params.R, mu)' aMoon(RF, y(i, :)', t(i), params.initMjd2000)'];
+%         end
+%         varargout{3} = a;
+%     end
+
 end
 

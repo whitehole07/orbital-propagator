@@ -57,7 +57,7 @@ function fig = plotOrbit(r, varargin)
         plot3(r(1), r(2), r(3), '.', 'MarkerSize', 30)
     else
         if ~isempty(para.evolution)
-            if ~para.velocity; error("Vellocity array needed to plot orbit evolution"); end
+            if ~para.velocity; error("Velocity array needed to plot orbit evolution"); end
             % Get celestial body
             body = celestialBody(para.bodyName);
             

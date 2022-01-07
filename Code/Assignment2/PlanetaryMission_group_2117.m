@@ -61,9 +61,9 @@ ttkT = linspace(0, k*T, 30000)';        % k orbits
 [lat10D, lon10D] = GroundTrack(rr10D, tt10D, cen_planet.name);  % 10 days  
 
 % Groundtrack plot
-% PlotGroundTrack(lat1T, lon1T);       % 1 orbit
-% PlotGroundTrack(lat1D, lon1D);       % 1 day
-% PlotGroundTrack(lat10D, lon10D);     % 10 days
+PlotGroundTrack(lat1T, lon1T, "title", "Unperturbed Nominal Ground Track", "subtitle", "Over 1 orbit");       % 1 orbit
+PlotGroundTrack(lat1D, lon1D, "title", "Unperturbed Nominal Ground Track", "subtitle", "Over 1 day");         % 1 day
+PlotGroundTrack(lat10D, lon10D, "title", "Unperturbed Nominal Ground Track", "subtitle", "Over 10 days");     % 10 days
 
 % 2.b) Modified semimajor axis for repeating groundtrack
 % Modified semi major axis for repeating groundtrack (unperturbed)
@@ -84,12 +84,12 @@ kepm = kep0; kepm(1) = am;
 % Modified orbit propagation (Unperturbed)
 [~, rrkTm, ~] = OdeSolver("cartesian", [rm; vm], ttkTm, cen_planet.mu);    % k orbits
 
-
 % Modified orbit groundtracks
 [latkTm, lonkTm] = GroundTrack(rrkTm, ttkTm, cen_planet.name);      % k orbits
 
 % Plot modified groundtracks
-% PlotGroundTrack(latkTm, lonkTm);
+PlotGroundTrack(latkTm, lonkTm, "title", "Unperturbed Modified Ground Track", ...
+    "subtitle", "Over N*k orbits, where k = 9");
 
 % 2.c) Plot adding assigned perturbations
 % Physical parameters for perturbations
@@ -103,15 +103,12 @@ params = odeParamStruct( ...
 % Nominal orbit propagation and groundtrack (Perturbed)
 [~, rrkTp, ~] = OdeSolver("cartesian", [r0; v0], ttkT, cen_planet.mu, params);    % k orbits
 [latkTp, lonkTp] = GroundTrack(rrkTp, ttkT, cen_planet.name);
-% PlotGroundTrack(latkTp, lonkTp);
+PlotGroundTrack(latkTp, lonkTp, "title", "Perturbed Nominal Ground Track", "subtitle", "Over 9 orbits");
 
 % Modified orbit propagation and groundtrack (Perturbed)
 [~, rrkTmp, ~] = OdeSolver("cartesian", [rm; vm], ttkTm, cen_planet.mu, params);  % k orbits
 [latkTmp, lonkTmp] = GroundTrack(rrkTmp, ttkTm, cen_planet.name);
-% PlotGroundTrack(latkTmp, lonkTmp);
-
-% The groundtrack clearly doesn't repeat itself anymore, but why is this
-% happening?
+PlotGroundTrack(latkTmp, lonkTmp, "title", "Perturbed Modified Ground Track", "subtitle", "Over 9 orbits");
 
 %% 3) Introduce the assigned perturbations
 % Assigned perturbations are: J2 and Moon
@@ -120,7 +117,7 @@ params = odeParamStruct( ...
 %% 4) Propagate the perturbed orbit
 % Time array
 n = 500;                            % Number of revolutions
-ttnT = linspace(0, n*T, n*100)';    % n orbits
+ttnT = linspace(0, n*T, 100*n)';    % n orbits
 
 % Cartesian coordinates
 [~, rrTpc, vvTpc] = OdeSolver("cartesian", [r0; v0], ttnT, cen_planet.mu, params);    % 1 orbit
@@ -136,13 +133,13 @@ for i = 1:length(ttnT); kepc(i, :) = CartesianToKeplerian(rrTpc(i, :), vvTpc(i, 
 % Unwrap OM, om and f
 kepc(:, 4:end) = unwrap(kepc(:, 4:end));
 
-% Comparing both propagation methods (unfiltered)
-KepHistoryPlot("a",  ttnT/T, kep(:, 1), kepc(:, 1))   % a
-KepHistoryPlot("e",  ttnT/T, kep(:, 2), kepc(:, 2))   % e
-KepHistoryPlot("i",  ttnT/T, kep(:, 3), kepc(:, 3))   % i
-KepHistoryPlot("OM", ttnT/T, kep(:, 4), kepc(:, 4))   % OM
-KepHistoryPlot("om", ttnT/T, kep(:, 5), kepc(:, 5))   % om
-KepHistoryPlot("f",  ttnT/T, kep(:, 6), kepc(:, 6))   % f
+% % Comparing both propagation methods (unfiltered)
+% KepHistoryPlot("a",  ttnT/T, kep(:, 1), kepc(:, 1))   % a
+% KepHistoryPlot("e",  ttnT/T, kep(:, 2), kepc(:, 2))   % e
+% KepHistoryPlot("i",  ttnT/T, kep(:, 3), kepc(:, 3))   % i
+% KepHistoryPlot("OM", ttnT/T, kep(:, 4), kepc(:, 4))   % OM
+% KepHistoryPlot("om", ttnT/T, kep(:, 5), kepc(:, 5))   % om
+% KepHistoryPlot("f",  ttnT/T, kep(:, 6), kepc(:, 6))   % f
 
 %% 6) Represent the evolution of the orbit
 % Perturbed orbit plot
@@ -161,7 +158,7 @@ view(75, 40)
 
 %% 7) Filtering of high frequencies 
 % Moving Mean LPF
-kepf = MovmeanLPF(ttnT, kepc, 20*T);
+kepf = MovmeanLPF(ttnT, kepc, 100*T);
 
 % Comparing both propagation methods (unfiltered and filtered)
 KepHistoryPlot("a",  ttnT/T, kep(:, 1), kepc(:, 1), "filtered", kepf(:, 1), "errorPlot", true)   % a
@@ -179,7 +176,7 @@ clear; clc;
 cen_planet = celestialBody("Earth");  % Central Planet (Earth)
 
 % Load ephemerides of selected orbit
-ephemerides = readtable('horizons_results.xlsx');
+ephemerides = readtable('ATLAS5-RocketBody-2009-064B.xlsx');
 
 % Time span
 timespan = jd2mjd2000(ephemerides{:, 'JDTDB'});       % MJD2000
@@ -234,4 +231,3 @@ KepHistoryPlot("i",  tt/T, kep_sim(:, 3), kep_eph(:, 3), "errorPlot", true, "fNa
 KepHistoryPlot("OM", tt/T, kep_sim(:, 4), kep_eph(:, 4), "errorPlot", true, "fName", "Simulated", "sName", "Real")   % OM
 KepHistoryPlot("om", tt/T, kep_sim(:, 5), kep_eph(:, 5), "errorPlot", true, "fName", "Simulated", "sName", "Real")   % om
 KepHistoryPlot("f",  tt/T, kep_sim(:, 6), kep_eph(:, 6), "errorPlot", true, "fName", "Simulated", "sName", "Real")   % f
-

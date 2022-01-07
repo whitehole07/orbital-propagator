@@ -1,4 +1,4 @@
-function PlotGroundTrack(lat, lon)
+function PlotGroundTrack(lat, lon, varargin)
 %PlotGroundTrack ODE system for the two-body problem (Keplerian motion)
 %
 % PROTOTYPE:
@@ -18,6 +18,14 @@ function PlotGroundTrack(lat, lon)
 % VERSIONS
 % 2021-10-20: First version
 %   
+
+    optionsStruct = struct( ...
+        "title", "", ...
+        "subtitle", "" ...
+    );
+
+    para = variableArguments(optionsStruct, varargin, true);
+    
     figure("name", "Groundtrack", "numbertitle", "off", "position", [0 0 1200 600])
     
     xlim([-180 180])
@@ -38,7 +46,9 @@ function PlotGroundTrack(lat, lon)
     
     xlabel('Longitude $[deg]$', 'Interpreter', 'latex')
     ylabel('Latitude $[deg]$', 'Interpreter', 'latex')
+    
     legend("Ground track", "Start", "End")
+    title(para.title, para.subtitle)
     
     xticks(-180:30:180)
     yticks(-90:30:90)

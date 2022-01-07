@@ -72,7 +72,9 @@ function KepHistoryPlot(name, tv, xk, xc, varargin)
         % Left plot
         nexttile
         if para.filtered
-            plot(tv, xc, tv, xk, tv, para.filtered)
+            plot(tv, xc, tv, xk)
+            hold on
+            plot(tv, para.filtered, 'linewidth', 3);
             legend(para.fName, para.sName, "Filtered")
         else
             plot(tv, xc, tv, xk)
